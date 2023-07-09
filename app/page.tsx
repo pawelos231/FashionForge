@@ -1,6 +1,3 @@
-import React from "react";
-const sima = () => {
-  return <div>siema</div>;
-};
-
-export default sima;
+export default function Home() {
+  return <h1 className="text-3xl underline">Hello s!</h1>;
+}
