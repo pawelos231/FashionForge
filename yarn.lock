@@ -206,6 +206,11 @@
     "picocolors" "^1.0.0"
     "tslib" "^2.6.0"
 
+"@prisma/engines@5.0.0":
+  "integrity" "sha512-kyT/8fd0OpWmhAU5YnY7eP31brW1q1YrTGoblWrhQJDiN/1K+Z8S1kylcmtjqx5wsUGcP1HBWutayA/jtyt+sg=="
+  "resolved" "https://registry.npmjs.org/@prisma/engines/-/engines-5.0.0.tgz"
+  "version" "5.0.0"
+
 "@react-spring/animated@~9.6.1":
   "integrity" "sha512-ls/rJBrAqiAYozjLo5EPPLLOb1LM0lNVQcXODTC1SMtS6DbuBCPaKco5svFUQFMP2dso3O+qcC4k9FsKc0KxMQ=="
   "resolved" "https://registry.npmjs.org/@react-spring/animated/-/animated-9.6.1.tgz"
@@ -2277,6 +2282,13 @@
   "integrity" "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   "version" "1.2.1"
+
+"prisma@^5.0.0":
+  "integrity" "sha512-KYWk83Fhi1FH59jSpavAYTt2eoMVW9YKgu8ci0kuUnt6Dup5Qy47pcB4/TLmiPAbhGrxxSz7gsSnJcCmkyPANA=="
+  "resolved" "https://registry.npmjs.org/prisma/-/prisma-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "@prisma/engines" "5.0.0"
 
 "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
