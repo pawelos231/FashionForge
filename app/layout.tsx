@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import { store } from "../redux/store";
 
 export default function RootLayout({
   children,

@@ -1,10 +1,20 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "baseUrl": ".",
+    "paths": {
+      "@server/*": ["server/*"],
+      "@types/*": ["types/*"],
+      "@redux/*": ["redux/*"],
+      "@public/*": ["public/*"],
+      "@app/*": ["app/*"],
+      "@hooks/*": ["hooks/*"],
+      "@helpers/*": ["helpers/*"],
+      "@constants/*": ["constants/*"],
+      "@config/*": ["config/*"],
+      "@components/*": ["components/*"],
+      "@UI/*": ["UI/*"]
+    },
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -24,13 +34,6 @@
     ],
     "strictNullChecks": true
   },
-  "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
