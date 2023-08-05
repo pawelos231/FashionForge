@@ -10,22 +10,29 @@ import Canvas from "@components/Canvas/Canvas";
 const Customizer = () => {
   return (
     <AnimatePresence>
-      <motion.div key={"custom"} {...slideAnimation("left")}>
-        <div>
-          <div className="editortabs-container tabs">
-            {" "}
-            {["siema", "siema2", "siema3"].map((item) => {
-              return <Tab key={item} tab={item} />;
-            })}
+      <>
+        <motion.div
+          key="custom"
+          className="absolute top-0 left-0 z-10"
+          {...slideAnimation("left")}
+        >
+          <div className="flex items-center z-10">
+            <div className="editortabs-container tabs z-10">
+              {[1, 2, 3].map((tab) => (
+                <Tab key={Math.random()} tab="siema" />
+              ))}
+              siii
+            </div>
           </div>
-        </div>
-      </motion.div>
-      <motion.div className="filtertabs-container" {...slideAnimation("up")}>
-        {["siema", "siema2", "siema3"].map((item) => {
-          return <Tab key={item} tab={item} />;
-        })}
-      </motion.div>
-      <Canvas />
+        </motion.div>
+
+        <motion.div className="filtertabs-container" {...slideAnimation("up")}>
+          {[1, 2, 3].map((tab) => (
+            <Tab key={Math.random()} tab="siema" />
+          ))}
+        </motion.div>
+        <Canvas />
+      </>
     </AnimatePresence>
   );
 };
