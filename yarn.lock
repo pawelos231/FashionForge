@@ -206,6 +206,7 @@
     "picocolors" "^1.0.0"
     "tslib" "^2.6.0"
 
+<<<<<<< HEAD
 "@prisma/client@^5.1.1":
   "integrity" "sha512-fxcCeK5pMQGcgCqCrWsi+I2rpIbk0rAhdrN+ke7f34tIrgPwA68ensrpin+9+fZvuV2OtzHmuipwduSY6HswdA=="
   "resolved" "https://registry.npmjs.org/@prisma/client/-/client-5.1.1.tgz"
@@ -222,6 +223,12 @@
   "integrity" "sha512-NV/4nVNWFZSJCCIA3HIFJbbDKO/NARc9ej0tX5S9k2EVbkrFJC4Xt9b0u4rNZWL4V+F5LAjvta8vzEUw0rw+HA=="
   "resolved" "https://registry.npmjs.org/@prisma/engines/-/engines-5.1.1.tgz"
   "version" "5.1.1"
+=======
+"@prisma/engines@5.0.0":
+  "integrity" "sha512-kyT/8fd0OpWmhAU5YnY7eP31brW1q1YrTGoblWrhQJDiN/1K+Z8S1kylcmtjqx5wsUGcP1HBWutayA/jtyt+sg=="
+  "resolved" "https://registry.npmjs.org/@prisma/engines/-/engines-5.0.0.tgz"
+  "version" "5.0.0"
+>>>>>>> parent of 7a795f3 (further customization)
 
 "@react-spring/animated@~9.6.1":
   "integrity" "sha512-ls/rJBrAqiAYozjLo5EPPLLOb1LM0lNVQcXODTC1SMtS6DbuBCPaKco5svFUQFMP2dso3O+qcC4k9FsKc0KxMQ=="
@@ -2330,10 +2337,17 @@
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   "version" "1.2.1"
 
+<<<<<<< HEAD
 "prisma@*", "prisma@^5.1.1":
   "integrity" "sha512-WJFG/U7sMmcc6TjJTTifTfpI6Wjoh55xl4AzopVwAdyK68L9/ogNo8QQ2cxuUjJf/Wa82z/uhyh3wMzvRIBphg=="
   "resolved" "https://registry.npmjs.org/prisma/-/prisma-5.1.1.tgz"
   "version" "5.1.1"
+=======
+"prisma@^5.0.0":
+  "integrity" "sha512-KYWk83Fhi1FH59jSpavAYTt2eoMVW9YKgu8ci0kuUnt6Dup5Qy47pcB4/TLmiPAbhGrxxSz7gsSnJcCmkyPANA=="
+  "resolved" "https://registry.npmjs.org/prisma/-/prisma-5.0.0.tgz"
+  "version" "5.0.0"
+>>>>>>> parent of 7a795f3 (further customization)
   dependencies:
     "@prisma/engines" "5.1.1"
 

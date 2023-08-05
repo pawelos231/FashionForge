@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/prisma/migrations
 .pnp.js
 
 # testing
@@ -27,6 +28,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel

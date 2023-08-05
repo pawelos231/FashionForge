@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base{
+    body {
+        @apply dark:bg-[#0F0E0E] dark:text-white bg-white
+    }
+}
 
 body{
     height: 200vh;
