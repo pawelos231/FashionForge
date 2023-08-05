@@ -1,5 +1,7 @@
+import RegisterComponent from "@components/auth/register";
+
 const Register = () => {
-  return <div>register</div>;
+  return <RegisterComponent />;
 };
 
 export default Register;
