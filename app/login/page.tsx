@@ -1,11 +1,9 @@
-import { db } from "@lib/db";
+"use client";
+
+import LoginComponent from "@components/auth/login";
+
 const Login = async () => {
-  const simples = await db.simple.findMany();
-  return (
-    <div>
-      <div>login</div>
-    </div>
-  );
+  return <LoginComponent />;
 };
 
 export default Login;
