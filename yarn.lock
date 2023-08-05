@@ -127,6 +127,11 @@
   "resolved" "https://registry.npmjs.org/@eslint/js/-/js-8.44.0.tgz"
   "version" "8.44.0"
 
+"@hookform/resolvers@^3.1.1":
+  "integrity" "sha512-tS16bAUkqjITNSvbJuO1x7MXbn7Oe8ZziDTJdA9mMvsoYthnOOiznOTGBYwbdlYBgU+tgpI/BtTU3paRbCuSlg=="
+  "resolved" "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-3.1.1.tgz"
+  "version" "3.1.1"
+
 "@humanwhocodes/config-array@^0.11.10":
   "integrity" "sha512-KVVjQmNUepDVGXNuoRRdmmEjruj0KfiGSbS8LVc12LMsWDQzRXJ0qdhN8L8uUigKpfEHRhlaQFY0ib1tnUbNeQ=="
   "resolved" "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.11.10.tgz"
@@ -3606,7 +3611,7 @@
     "loose-envify" "^1.1.0"
     "scheduler" "^0.23.0"
 
-"react-hook-form@^7.45.3":
+"react-hook-form@^7.0.0", "react-hook-form@^7.45.3":
   "integrity" "sha512-qViAZAgwci9cQS9TXpj+Bg12bR3IJIz0e1rPDRQV+4f48t8wJFffsG3vsGSBhsZCYL/8EvCitrIO77czylNl0Q=="
   "resolved" "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.45.3.tgz"
   "version" "7.45.3"

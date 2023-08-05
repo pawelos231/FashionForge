@@ -120,10 +120,6 @@ const Customizer = () => {
         return null;
     }
   };
-  console.log("render");
-  const handle = useCallback(() => {
-    console.log("siema");
-  }, []);
 
   const state: CustomizerState = {
     logoShirt: activeFilterTab.logoShirt,
