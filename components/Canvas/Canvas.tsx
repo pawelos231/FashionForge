@@ -1,20 +1,16 @@
 "use client";
-
-export type StateCanvasProps = {
-  state: {
-    logoShirt: boolean;
-    stylishShirt: boolean;
-  };
-  color: string;
-};
-
+import { CustomizerState } from "@app/customizer/page";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center } from "@react-three/drei";
 import Shirt from "./Shirt";
 import CameraRig from "./CameraRig";
 import Backdrop from "./Backdrop";
 
-const CanvasMod = ({ state, color }: StateCanvasProps) => {
+type Props = {
+  state: CustomizerState;
+};
+
+const CanvasMod = ({ state }: Props) => {
   return (
     <Canvas
       shadows
@@ -27,7 +23,7 @@ const CanvasMod = ({ state, color }: StateCanvasProps) => {
       <CameraRig>
         <Backdrop />
         <Center>
-          <Shirt state={state} color={color} />
+          <Shirt PassedState={state} />
         </Center>
       </CameraRig>
     </Canvas>

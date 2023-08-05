@@ -19,7 +19,7 @@ const SearchBar = () => {
         }}
         value={input}
         isLoading={false}
-        placeholder="Search communities..."
+        placeholder="Search Projects..."
       />
       {input.length > 0 && (
         <CommandList>

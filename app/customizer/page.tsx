@@ -15,17 +15,30 @@ import Canvas from "@components/Canvas/Canvas";
 import { EditorTabs } from "@constants/CustomizerTabs";
 import FilterTab from "@components/Pickers/FilterTab";
 import { EditorTabsEnum } from "@constants/CustomizerTabs";
+import { DecalTypes } from "@constants/CustomizerTabs";
+import {
+  DEFAULT_LOGO_DECAL,
+  DEFAULT_FULL_DECAL,
+} from "@constants/CustomizerTabs";
 
 type ActiveFilterType = {
   logoShirt: boolean;
   stylishShirt: boolean;
 };
 
+export type CustomizerState = {
+  logoDecal: string;
+  fullDecal: string;
+  color: string;
+} & ActiveFilterType;
+
 const Customizer = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [color, setColor] = useState<string>("#fff");
   const [prompt, setPrompt] = useState<string>("");
   const [generatingImg, setGeneratingImg] = useState(false);
+  const [logoDecal, setLogoDecal] = useState<string>(DEFAULT_LOGO_DECAL);
+  const [fullDecal, setFullDecal] = useState<string>(DEFAULT_FULL_DECAL);
 
   const [activeEditorTab, setActiveEditorTab] = useState<EditorTabsEnum | "">(
     ""
@@ -47,11 +60,15 @@ const Customizer = () => {
     setFile(file);
   }, []);
 
-  const handleReadFile = useCallback(() => {
-    reader(file).then((result) => {
-      setActiveEditorTab("");
-    });
-  }, [file]);
+  const handleReadFile = useCallback(
+    (type: string) => {
+      reader(file).then((result) => {
+        handleDecals(type, result);
+        setActiveEditorTab("");
+      });
+    },
+    [file]
+  );
 
   const handleSetPrompt = useCallback((value: string) => {
     setPrompt(value);
@@ -67,6 +84,16 @@ const Customizer = () => {
     },
     []
   );
+
+  const handleDecals = (type, result) => {
+    const decalType = DecalTypes[type];
+
+    setFullDecal(result);
+
+    if (!activeFilterTab[decalType.filterTab]) {
+      handleChangeSelectedFilterTabs(decalType.filterTab);
+    }
+  };
 
   const generateTabContent = () => {
     switch (activeEditorTab) {
@@ -97,6 +124,14 @@ const Customizer = () => {
   const handle = useCallback(() => {
     console.log("siema");
   }, []);
+
+  const state: CustomizerState = {
+    logoShirt: activeFilterTab.logoShirt,
+    stylishShirt: activeFilterTab.stylishShirt,
+    logoDecal: logoDecal,
+    fullDecal: fullDecal,
+    color,
+  };
 
   return (
     <AnimatePresence>
@@ -134,7 +169,7 @@ const Customizer = () => {
             filterObj={activeFilterTab}
           />
         </motion.div>
-        <Canvas state={activeFilterTab} color={color} />
+        <Canvas state={state} />
       </>
     </AnimatePresence>
   );

@@ -1,37 +1,43 @@
 import React from "react";
+import { Button } from "@UI/Button";
 
-type InputEvent = React.ChangeEvent<HTMLInputElement>;
-type Props = {
-  file: File | undefined;
-  setFile: (file: File) => void;
-  readFile: () => void;
-};
-
-const FilePicker = ({ file, setFile, readFile }: Props) => {
+const FilePicker = ({ file, setFile, readFile }) => {
   return (
-    <div className="filepicker-container">
+    <div className="filepicker-container relative">
       <div className="flex-1 flex flex-col">
         <input
           id="file-upload"
           type="file"
           accept="image/*"
-          onChange={(e: InputEvent) => setFile(e.target.files![0])}
+          onChange={(e) => setFile(e.target.files![0])}
         />
         <label htmlFor="file-upload" className="filepicker-label">
           Upload File
         </label>
 
         <p className="mt-2 text-gray-500 text-xs truncate">
-          {!file ? "No file selected" : file!.name || ""}
+          {!file || file === "" ? "No file selected" : file.name}
         </p>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button title="Logo" onClick={() => readFile()} className="text-xs" />
-        <button title="Full" onClick={() => readFile()} className="text-xs" />
+      <div className="mt-2 flex  absolute bottom-2  gap-3 h-12 basis-[50%] w-full">
+        <Button
+          onClick={() => readFile("full")}
+          className="text-xs bg-slate-100 w-[40%] h-[40%] borde text-black hover:text-white rounded-md p-4 "
+          placeholder="logo"
+        >
+          Full
+        </Button>
+        <Button
+          onClick={() => readFile("logo")}
+          className="text-xs bg-slate-100 w-[40%] h-[40%] borde text-black hover:text-white rounded-md p-4 "
+          placeholder="logo"
+        >
+          Logo
+        </Button>
       </div>
     </div>
   );
 };
 
-export default React.memo(FilePicker);
+export default FilePicker;

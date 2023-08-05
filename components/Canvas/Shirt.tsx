@@ -1,16 +1,20 @@
 import { easing } from "maath";
 import { useFrame } from "@react-three/fiber";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
-import { StateCanvasProps } from "./Canvas";
+import { CustomizerState } from "@app/customizer/page";
 
-const Shirt = ({ state, color }: StateCanvasProps) => {
+type Props = {
+  PassedState: CustomizerState;
+};
+
+const Shirt = ({ PassedState }: Props) => {
   const { nodes, materials } = useGLTF("/shirt_baked.glb") as any;
 
-  const logoTexture = useTexture("/krzysiaPysk.png");
-  const fullTexture = useTexture("/progf.jpg");
+  const logoTexture = useTexture(PassedState.logoDecal);
+  const fullTexture = useTexture(PassedState.fullDecal);
 
   useFrame((state, delta) => {
-    easing.dampC(materials.lambert1.color, color, 0.25, delta);
+    easing.dampC(materials.lambert1.color, PassedState.color, 0.25, delta);
   });
 
   const stateString = JSON.stringify(Math.random()); // for now, it rerenders when state changes
@@ -24,7 +28,7 @@ const Shirt = ({ state, color }: StateCanvasProps) => {
         material-roughness={1}
         dispose={null}
       >
-        {state.stylishShirt ? (
+        {PassedState.stylishShirt ? (
           <Decal
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}
@@ -33,7 +37,7 @@ const Shirt = ({ state, color }: StateCanvasProps) => {
           />
         ) : null}
 
-        {state.logoShirt ? (
+        {PassedState.logoShirt ? (
           <Decal
             position={[0, 0.04, 0.15]}
             rotation={[0, 0, 0]}

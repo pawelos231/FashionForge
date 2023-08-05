@@ -9,6 +9,9 @@ type Tab = {
   icon: string;
 };
 
+export const DEFAULT_LOGO_DECAL = "/krzysiaPysk.png";
+export const DEFAULT_FULL_DECAL = "/progf.jpg";
+
 export const EditorTabs: Tab[] = [
   {
     name: EditorTabsEnum.COLOR_PICKER,
@@ -23,3 +26,19 @@ export const EditorTabs: Tab[] = [
     icon: "/noimage.jpg",
   },
 ];
+
+export type SingleDecalProperty = {
+  stateProperty: string;
+  filterTab: string;
+};
+
+export const DecalTypes = {
+  logo: {
+    stateProperty: "logoDecal",
+    filterTab: "logoShirt",
+  },
+  full: {
+    stateProperty: "fullDecal",
+    filterTab: "stylishShirt",
+  },
+};
