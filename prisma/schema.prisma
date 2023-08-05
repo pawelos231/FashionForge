@@ -33,6 +33,7 @@ model Simple {
 model Project {
   id        Int      @id @default(autoincrement())
   upVotes   Int
+  DownVotes Int
   auhor     User     @relation(fields: [userId], references: [id])
   userId    Int
   blobLink  String
