@@ -7,7 +7,6 @@ type Props = {
 };
 
 const ColorPicker = ({ color, setColor }: Props) => {
-  console.log(color);
   return (
     <div className="absolute left-full ml-3">
       <SketchPicker

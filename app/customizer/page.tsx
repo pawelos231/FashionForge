@@ -87,8 +87,13 @@ const Customizer = () => {
 
   const handleDecals = (type, result) => {
     const decalType = DecalTypes[type];
-
-    setFullDecal(result);
+    console.log(result);
+    //move this to enums later
+    if (type == "full") {
+      setFullDecal(result);
+    } else if (type == "logo") {
+      setLogoDecal(result);
+    }
 
     if (!activeFilterTab[decalType.filterTab]) {
       handleChangeSelectedFilterTabs(decalType.filterTab);

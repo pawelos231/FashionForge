@@ -21,6 +21,8 @@ model User {
   updateAt  DateTime @updatedAt
 
   projects Project[]
+
+  @@index([email])
 }
 
 model Simple {

@@ -23,6 +23,9 @@ export const downloadCanvasToImage = () => {
 export const reader = (file) =>
   new Promise((resolve, reject) => {
     const fileReader = new FileReader();
+    fileReader.onloadstart = () => {
+      console.log(`File size: ${file.size} bytes`);
+    };
     fileReader.onload = () => resolve(fileReader.result);
     fileReader.onerror = () => reject(fileReader.error);
     fileReader.readAsDataURL(file);
