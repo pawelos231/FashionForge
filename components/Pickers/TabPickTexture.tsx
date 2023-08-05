@@ -1,10 +1,27 @@
-type Props = {
-  tab: string;
-  handleClick: () => void;
+"use client";
+
+export type ActiveFilterType = {
+  logoShirt: boolean;
+  stylishShirt: boolean;
 };
 
-const TabPickTexture = ({ tab, handleClick }: Props) => {
-  return <div onClick={handleClick}>{tab}</div>;
+type Props = {
+  tab: string;
+  filterObj: ActiveFilterType;
+  handleClick: (changed: ActiveFilterType) => void;
+};
+
+const TabPickTexture = ({ tab, handleClick, filterObj }: Props) => {
+  console.log(filterObj);
+  return (
+    <div
+      onClick={() =>
+        handleClick({ ...filterObj, logoShirt: !filterObj.logoShirt })
+      }
+    >
+      {tab}
+    </div>
+  );
 };
 
 export default TabPickTexture;

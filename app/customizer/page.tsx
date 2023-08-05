@@ -49,7 +49,7 @@ const Customizer = () => {
     });
   }, [file]);
 
-  const handleSetPrompt = useCallback((value) => {
+  const handleSetPrompt = useCallback((value: string) => {
     setPrompt(value);
   }, []);
 
@@ -57,7 +57,12 @@ const Customizer = () => {
     // Your handleSubmit logic here
   }, []);
 
-  const handleSubmit = () => {};
+  const handleChangeSelectedFilterTabs = useCallback(
+    (changed: ActiveFilterType) => {
+      return setActiveFilterTab(changed);
+    },
+    []
+  );
 
   const generateTabContent = () => {
     switch (activeEditorTab) {
@@ -114,8 +119,16 @@ const Customizer = () => {
         </motion.div>
 
         <motion.div className="filtertabs-container" {...slideAnimation("up")}>
-          <TabPickTexture tab="siema" handleClick={handle} />{" "}
-          <TabPickFull tab="siema" handleClick={handle} />
+          <TabPickTexture
+            tab="siema"
+            handleClick={handleChangeSelectedFilterTabs}
+            filterObj={activeFilterTab}
+          />{" "}
+          <TabPickFull
+            tab="siema"
+            handleClick={handleChangeSelectedFilterTabs}
+            filterObj={activeFilterTab}
+          />
         </motion.div>
         <Canvas />
       </>
