@@ -22,9 +22,9 @@ type ActiveFilterType = {
 };
 
 const Customizer = () => {
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | undefined>(undefined);
 
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState<string>("");
   const [generatingImg, setGeneratingImg] = useState(false);
 
   const [activeEditorTab, setActiveEditorTab] = useState<EditorTabsEnum | "">(
@@ -35,11 +35,27 @@ const Customizer = () => {
     stylishShirt: false,
   });
 
-  const readFile = (type) => {
+  const handlePickFilter = useCallback((tabName) => {
+    setActiveEditorTab(tabName);
+  }, []);
+
+  const handleSetFile = useCallback((file) => {
+    setFile(file);
+  }, []);
+
+  const handleReadFile = useCallback(() => {
     reader(file).then((result) => {
       setActiveEditorTab("");
     });
-  };
+  }, [file]);
+
+  const handleSetPrompt = useCallback((value) => {
+    setPrompt(value);
+  }, []);
+
+  const handleSetSubmit = useCallback(() => {
+    // Your handleSubmit logic here
+  }, []);
 
   const handleSubmit = () => {};
 
@@ -48,21 +64,27 @@ const Customizer = () => {
       case EditorTabsEnum.COLOR_PICKER:
         return <ColorPicker />;
       case EditorTabsEnum.FILE_PICKER:
-        return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
+        return (
+          <FilePicker
+            file={file}
+            setFile={handleSetFile}
+            readFile={handleReadFile}
+          />
+        );
       case EditorTabsEnum.AIPICKER:
         return (
           <AIPicker
             prompt={prompt}
-            setPrompt={setPrompt}
             generatingImg={generatingImg}
-            handleSubmit={handleSubmit}
+            setPrompt={handleSetPrompt}
+            handleSubmit={handleSetSubmit}
           />
         );
       default:
         return null;
     }
   };
-
+  console.log("render");
   const handle = useCallback(() => {
     console.log("siema");
   }, []);
@@ -82,9 +104,7 @@ const Customizer = () => {
                   <FilterTab
                     tabName={item.name}
                     alreadyActiveTabName={activeEditorTab}
-                    handlePickFilter={useCallback((tabName) => {
-                      setActiveEditorTab(tabName);
-                    }, [])}
+                    handlePickFilter={handlePickFilter}
                   />
                 );
               })}
