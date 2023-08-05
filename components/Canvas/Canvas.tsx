@@ -1,12 +1,20 @@
 "use client";
 
+export type StateCanvasProps = {
+  state: {
+    logoShirt: boolean;
+    stylishShirt: boolean;
+  };
+  color: string;
+};
+
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center } from "@react-three/drei";
 import Shirt from "./Shirt";
 import CameraRig from "./CameraRig";
 import Backdrop from "./Backdrop";
 
-const CanvasMod = () => {
+const CanvasMod = ({ state, color }: StateCanvasProps) => {
   return (
     <Canvas
       shadows
@@ -19,7 +27,7 @@ const CanvasMod = () => {
       <CameraRig>
         <Backdrop />
         <Center>
-          <Shirt />
+          <Shirt state={state} color={color} />
         </Center>
       </CameraRig>
     </Canvas>

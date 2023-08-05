@@ -23,7 +23,7 @@ type ActiveFilterType = {
 
 const Customizer = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
-
+  const [color, setColor] = useState<string>("#fff");
   const [prompt, setPrompt] = useState<string>("");
   const [generatingImg, setGeneratingImg] = useState(false);
 
@@ -34,6 +34,10 @@ const Customizer = () => {
     logoShirt: true,
     stylishShirt: false,
   });
+
+  const handleSetColor = useCallback((color: string) => {
+    setColor(color);
+  }, []);
 
   const handlePickFilter = useCallback((tabName) => {
     setActiveEditorTab(tabName);
@@ -67,7 +71,7 @@ const Customizer = () => {
   const generateTabContent = () => {
     switch (activeEditorTab) {
       case EditorTabsEnum.COLOR_PICKER:
-        return <ColorPicker />;
+        return <ColorPicker setColor={handleSetColor} color={color} />;
       case EditorTabsEnum.FILE_PICKER:
         return (
           <FilePicker
@@ -130,7 +134,7 @@ const Customizer = () => {
             filterObj={activeFilterTab}
           />
         </motion.div>
-        <Canvas />
+        <Canvas state={activeFilterTab} color={color} />
       </>
     </AnimatePresence>
   );
