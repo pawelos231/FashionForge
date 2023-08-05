@@ -23,6 +23,11 @@ model User {
   projects Project[]
 }
 
+model Simple {
+  id   Int    @id @default(autoincrement())
+  data String
+}
+
 model Project {
   id        Int      @id @default(autoincrement())
   upVotes   Int
