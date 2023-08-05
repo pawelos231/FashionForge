@@ -16,10 +16,10 @@ const CanvasMod = ({ state }: Props) => {
       shadows
       camera={{ position: [0, 0, 0], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
-      className="absolute top-0 z-0"
+      className="w-full max-w-full h-full transition-all duration-0 ease-in"
     >
-      <ambientLight intensity={0.5}></ambientLight>
-      <Environment preset="city"></Environment>
+      <ambientLight intensity={0.5} />
+      <Environment preset="city" />
       <CameraRig>
         <Backdrop />
         <Center>
