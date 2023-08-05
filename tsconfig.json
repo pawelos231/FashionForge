@@ -4,6 +4,7 @@
     "paths": {
       "@server/*": ["server/*"],
       "@types/*": ["types/*"],
+      "@lib/*": ["lib/*"],
       "@redux/*": ["redux/*"],
       "@public/*": ["public/*"],
       "@app/*": ["app/*"],
