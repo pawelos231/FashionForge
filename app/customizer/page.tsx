@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { downloadCanvasToImage, reader } from "@helpers/helperFuncs";
 import { fadeAnimation, slideAnimation } from "@helpers/motion";
 import { AIPicker, ColorPicker, Tab, FilePicker } from "@components/Pickers";
+import Canvas from "@components/Canvas/Canvas";
 
 const Customizer = () => {
   return (
@@ -24,6 +25,7 @@ const Customizer = () => {
           return <Tab key={item} tab={item} />;
         })}
       </motion.div>
+      <Canvas />
     </AnimatePresence>
   );
 };
