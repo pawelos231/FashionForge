@@ -1,13 +1,72 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { downloadCanvasToImage, reader } from "@helpers/helperFuncs";
 import { fadeAnimation, slideAnimation } from "@helpers/motion";
-import { AIPicker, ColorPicker, Tab, FilePicker } from "@components/Pickers";
+import {
+  AIPicker,
+  ColorPicker,
+  TabPickFull,
+  TabPickTexture,
+  FilePicker,
+} from "@components/Pickers";
 import Canvas from "@components/Canvas/Canvas";
+import { EditorTabs } from "@constants/CustomizerTabs";
+import FilterTab from "@components/Pickers/FilterTab";
+import { EditorTabsEnum } from "@constants/CustomizerTabs";
+
+type ActiveFilterType = {
+  logoShirt: boolean;
+  stylishShirt: boolean;
+};
 
 const Customizer = () => {
+  const [file, setFile] = useState<File>();
+
+  const [prompt, setPrompt] = useState("");
+  const [generatingImg, setGeneratingImg] = useState(false);
+
+  const [activeEditorTab, setActiveEditorTab] = useState<EditorTabsEnum | "">(
+    ""
+  );
+  const [activeFilterTab, setActiveFilterTab] = useState<ActiveFilterType>({
+    logoShirt: true,
+    stylishShirt: false,
+  });
+
+  const readFile = (type) => {
+    reader(file).then((result) => {
+      setActiveEditorTab("");
+    });
+  };
+
+  const handleSubmit = () => {};
+
+  const generateTabContent = () => {
+    switch (activeEditorTab) {
+      case EditorTabsEnum.COLOR_PICKER:
+        return <ColorPicker />;
+      case EditorTabsEnum.FILE_PICKER:
+        return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
+      case EditorTabsEnum.AIPICKER:
+        return (
+          <AIPicker
+            prompt={prompt}
+            setPrompt={setPrompt}
+            generatingImg={generatingImg}
+            handleSubmit={handleSubmit}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const handle = useCallback(() => {
+    console.log("siema");
+  }, []);
+
   return (
     <AnimatePresence>
       <>
@@ -18,18 +77,25 @@ const Customizer = () => {
         >
           <div className="flex items-center z-10">
             <div className="editortabs-container tabs z-10">
-              {[1, 2, 3].map((tab) => (
-                <Tab key={Math.random()} tab="siema" />
-              ))}
-              siii
+              {EditorTabs.map((item) => {
+                return (
+                  <FilterTab
+                    tabName={item.name}
+                    alreadyActiveTabName={activeEditorTab}
+                    handlePickFilter={useCallback((tabName) => {
+                      setActiveEditorTab(tabName);
+                    }, [])}
+                  />
+                );
+              })}
+              {generateTabContent()}
             </div>
           </div>
         </motion.div>
 
         <motion.div className="filtertabs-container" {...slideAnimation("up")}>
-          {[1, 2, 3].map((tab) => (
-            <Tab key={Math.random()} tab="siema" />
-          ))}
+          <TabPickTexture tab="siema" handleClick={handle} />{" "}
+          <TabPickFull tab="siema" handleClick={handle} />
         </motion.div>
         <Canvas />
       </>
