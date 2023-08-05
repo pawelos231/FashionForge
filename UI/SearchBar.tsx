@@ -20,7 +20,7 @@ const SearchBar = () => {
         value={input}
         isLoading={false}
         placeholder="Search communities..."
-      ></CommandInput>
+      />
       {input.length > 0 && (
         <CommandList>
           <CommandEmpty>No results found</CommandEmpty>
