@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginRequest, LoginValidator } from "@lib/validators/login";
 import { Button } from "@UI/Button";
+import Link from "next/link";
 
 const LoginComponent = () => {
   const {
@@ -64,6 +65,11 @@ const LoginComponent = () => {
         >
           Log In
         </Button>
+        <Link href={"/register"}>
+          <p className="text-center mt-5 transition-all duration-75 hover:scale-95 cursor-pointer">
+            I want to register
+          </p>
+        </Link>
       </form>
     </div>
   );
