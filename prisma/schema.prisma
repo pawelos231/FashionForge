@@ -33,6 +33,7 @@ model Project {
   upVotes   Int
   auhor     User     @relation(fields: [userId], references: [id])
   userId    Int
+  blobLink  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 
