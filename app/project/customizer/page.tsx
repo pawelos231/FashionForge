@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { downloadCanvasToImage, reader } from "@helpers/helperFuncs";
-import { fadeAnimation, slideAnimation } from "@helpers/motion";
+import { reader } from "@helpers/helperFuncs";
+import { slideAnimation } from "@helpers/motion";
 import {
   AIPicker,
   ColorPicker,
@@ -20,7 +20,9 @@ import {
   DEFAULT_LOGO_DECAL,
   DEFAULT_FULL_DECAL,
 } from "@constants/CustomizerTabs";
+import { TextureType } from "@components/Pickers/FilePicker";
 
+// Define types
 type ActiveFilterType = {
   logoShirt: boolean;
   stylishShirt: boolean;
@@ -32,14 +34,15 @@ export type CustomizerState = {
   color: string;
 } & ActiveFilterType;
 
+// Main component
 const Customizer = () => {
+  // State variables
   const [file, setFile] = useState<File | undefined>(undefined);
   const [color, setColor] = useState<string>("#fff");
   const [prompt, setPrompt] = useState<string>("");
   const [generatingImg, setGeneratingImg] = useState(false);
   const [logoDecal, setLogoDecal] = useState<string>(DEFAULT_LOGO_DECAL);
   const [fullDecal, setFullDecal] = useState<string>(DEFAULT_FULL_DECAL);
-
   const [activeEditorTab, setActiveEditorTab] = useState<EditorTabsEnum | "">(
     ""
   );
@@ -48,6 +51,7 @@ const Customizer = () => {
     stylishShirt: false,
   });
 
+  // Handlers
   const handleSetColor = useCallback((color: string) => {
     setColor(color);
   }, []);
@@ -56,12 +60,12 @@ const Customizer = () => {
     setActiveEditorTab(tabName);
   }, []);
 
-  const handleSetFile = useCallback((file) => {
+  const handleSetFile = useCallback((file: File) => {
     setFile(file);
   }, []);
 
   const handleReadFile = useCallback(
-    (type: string) => {
+    (type: TextureType) => {
       reader(file).then((result) => {
         handleDecals(type, result);
         setActiveEditorTab("");
@@ -80,26 +84,29 @@ const Customizer = () => {
 
   const handleChangeSelectedFilterTabs = useCallback(
     (changed: ActiveFilterType) => {
-      return setActiveFilterTab(changed);
+      setActiveFilterTab(changed);
     },
     []
   );
 
-  const handleDecals = (type, result) => {
+  const handleDecals = (type: TextureType, result) => {
     const decalType = DecalTypes[type];
-    console.log(result);
-    //move this to enums later
-    if (type == "full") {
+
+    if (type == TextureType.full) {
       setFullDecal(result);
-    } else if (type == "logo") {
+    } else if (type == TextureType.logo) {
       setLogoDecal(result);
     }
 
     if (!activeFilterTab[decalType.filterTab]) {
-      handleChangeSelectedFilterTabs(decalType.filterTab);
+      handleChangeSelectedFilterTabs({
+        ...activeFilterTab,
+        [decalType.filterTab]: decalType.filterTab,
+      });
     }
   };
 
+  // Generate tab content based on activeEditorTab
   const generateTabContent = () => {
     switch (activeEditorTab) {
       case EditorTabsEnum.COLOR_PICKER:
@@ -126,6 +133,7 @@ const Customizer = () => {
     }
   };
 
+  // Define the CustomizerState
   const state: CustomizerState = {
     logoShirt: activeFilterTab.logoShirt,
     stylishShirt: activeFilterTab.stylishShirt,
@@ -134,6 +142,7 @@ const Customizer = () => {
     color,
   };
 
+  // Return JSX
   return (
     <AnimatePresence>
       <>
@@ -144,15 +153,14 @@ const Customizer = () => {
         >
           <div className="flex items-center z-10">
             <div className="editortabs-container tabs z-10">
-              {EditorTabs.map((item) => {
-                return (
-                  <FilterTab
-                    tabName={item.name}
-                    alreadyActiveTabName={activeEditorTab}
-                    handlePickFilter={handlePickFilter}
-                  />
-                );
-              })}
+              {EditorTabs.map((item) => (
+                <FilterTab
+                  key={item.name}
+                  tabName={item.name}
+                  alreadyActiveTabName={activeEditorTab}
+                  handlePickFilter={handlePickFilter}
+                />
+              ))}
               {generateTabContent()}
             </div>
           </div>
@@ -160,12 +168,12 @@ const Customizer = () => {
 
         <motion.div className="filtertabs-container" {...slideAnimation("up")}>
           <TabPickTexture
-            tab="siema"
+            tab={TextureType.logo}
             handleClick={handleChangeSelectedFilterTabs}
             filterObj={activeFilterTab}
-          />{" "}
+          />
           <TabPickFull
-            tab="siema"
+            tab={TextureType.full}
             handleClick={handleChangeSelectedFilterTabs}
             filterObj={activeFilterTab}
           />

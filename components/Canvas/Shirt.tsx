@@ -1,7 +1,7 @@
 import { easing } from "maath";
 import { useFrame } from "@react-three/fiber";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
-import { CustomizerState } from "@app/customizer/page";
+import { CustomizerState } from "@app/project/customizer/page";
 
 type Props = {
   PassedState: CustomizerState;

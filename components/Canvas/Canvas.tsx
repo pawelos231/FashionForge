@@ -1,5 +1,5 @@
 "use client";
-import { CustomizerState } from "@app/customizer/page";
+import { CustomizerState } from "@app/project/customizer/page";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center } from "@react-three/drei";
 import Shirt from "./Shirt";

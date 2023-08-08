@@ -1,4 +1,5 @@
 import { EditorTabsEnum } from "@constants/CustomizerTabs";
+import { Button } from "@UI/Button";
 
 type Props = {
   tabName: EditorTabsEnum;
@@ -13,6 +14,7 @@ const FilterTab = ({
 }: Props) => {
   return (
     <div
+      className="w-full flex justify-center"
       onClick={() => {
         if (alreadyActiveTabName == tabName) {
           return handlePickFilter("");
@@ -21,7 +23,9 @@ const FilterTab = ({
         }
       }}
     >
-      {tabName}
+      <Button variant={"outline"} className="w-[80%]">
+        {tabName}
+      </Button>
     </div>
   );
 };
