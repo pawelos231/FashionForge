@@ -1,6 +1,6 @@
 "use client";
 
-import LoginComponent from "@components/auth/login";
+import LoginComponent from "@components/Auth/login";
 
 const Login = async () => {
   return <LoginComponent />;

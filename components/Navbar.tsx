@@ -10,7 +10,6 @@ const mockedLoggedInUser: boolean = true;
 
 const Navbar = () => {
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
     <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 border-b border-zinc-300 z-[10] py-2">
@@ -24,7 +23,7 @@ const Navbar = () => {
         <SearchBar />
 
         {mockedLoggedInUser ? (
-          <Link href="/project/customizer" className="flex gap-2 items-center">
+          <Link href="/project/create" className="flex gap-2 items-center">
             <Button className={buttonVariants()} variant={"link"}>
               {" "}
               Create Post
