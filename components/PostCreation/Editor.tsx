@@ -23,9 +23,10 @@ const ToolbarView = {
 
 type Props = {
   HandleChange: (value: string) => void;
+  register: any;
 };
 
-const QuillTextEditor = ({ HandleChange }: Props): JSX.Element => {
+const QuillTextEditor = ({ HandleChange, register }: Props): JSX.Element => {
   return (
     <div className="h-[80%]">
       <Quill
