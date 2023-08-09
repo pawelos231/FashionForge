@@ -1,5 +1,5 @@
+import Providers from "providers/Providers";
 import "../styles/globals.css";
-import { store } from "../redux/store";
 import Navbar from "@components/Navbar";
 
 export default function RootLayout({
@@ -10,8 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );

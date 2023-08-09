@@ -1,13 +1,22 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginRequest, LoginValidator } from "@lib/validators/login";
 import { Button } from "@UI/Button";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { wait } from "utils/wait";
 
 const LoginComponent = () => {
+  const router = useRouter();
+
   const {
     register,
     watch,
+    setValue,
     handleSubmit,
     formState: { errors }, // Get the form validation errors
   } = useForm<LoginRequest>({
@@ -18,8 +27,32 @@ const LoginComponent = () => {
     },
   });
 
-  const sendLoginData = () => {
-    console.log(watch("email"), watch("password"));
+  const { mutate: login, isLoading } = useMutation({
+    mutationFn: async ({ email, password }: LoginRequest) => {
+      const payload: LoginRequest = { email, password };
+      await wait(1000);
+      const { data } = await axios.post("/api/auth/login", payload);
+      return data;
+    },
+    onError: (err: any) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          return ""; //put here some taost like message later or something
+        }
+      }
+    },
+    onSuccess: () => {
+      console.log("success");
+      router.refresh();
+      setValue("email", "");
+      setValue("password", "");
+    },
+  });
+
+  const sendLoginData = async () => {
+    console.log(
+      await login({ email: watch("email"), password: watch("password") })
+    );
   };
 
   return (
@@ -60,6 +93,7 @@ const LoginComponent = () => {
           )}
         </div>
         <Button
+          isLoading={isLoading}
           type="submit"
           className="w-full py-2 font-semibold text-white bg-blue-500 rounded-sm"
         >

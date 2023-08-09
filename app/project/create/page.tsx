@@ -4,7 +4,6 @@ const Create = () => {
   return (
     <section className="w-full h-full justify-center flex items-center">
       <PostCreation />
-      
     </section>
   );
 };

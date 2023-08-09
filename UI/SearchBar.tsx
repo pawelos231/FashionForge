@@ -1,13 +1,7 @@
 "use client";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "./Command";
+
+import { useState } from "react";
+import { Command, CommandEmpty, CommandInput, CommandList } from "./Command";
 const SearchBar = () => {
   const [input, setInput] = useState<string>("");
 
