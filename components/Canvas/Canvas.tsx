@@ -1,5 +1,5 @@
 "use client";
-import { CustomizerState } from "@app/project/customizer/page";
+import { CustomizerState } from "@components/PostCreation/Customizer";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center } from "@react-three/drei";
 import Shirt from "./Shirt";
@@ -18,7 +18,7 @@ const CanvasMod = ({ state }: Props) => {
       gl={{ preserveDrawingBuffer: true }}
       className="w-full max-w-full h-full transition-all duration-0 ease-in"
     >
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.1} />
       <Environment preset="city" />
       <CameraRig>
         <Backdrop />

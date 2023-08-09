@@ -1,14 +1,15 @@
 import { easing } from "maath";
 import { useFrame } from "@react-three/fiber";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
-import { CustomizerState } from "@app/project/customizer/page";
+import { CustomizerState } from "@components/PostCreation/Customizer";
 
 type Props = {
   PassedState: CustomizerState;
 };
 
 const Shirt = ({ PassedState }: Props) => {
-  const { nodes, materials } = useGLTF("/shirt_baked.glb") as any;
+  const SHIRT_PATH = "/shirt_baked.glb";
+  const { nodes, materials } = useGLTF(SHIRT_PATH) as any;
 
   const logoTexture = useTexture(PassedState.logoDecal);
   const fullTexture = useTexture(PassedState.fullDecal);

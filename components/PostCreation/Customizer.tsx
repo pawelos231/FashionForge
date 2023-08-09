@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { reader } from "@helpers/helperFuncs";
@@ -21,6 +22,7 @@ import {
   DEFAULT_FULL_DECAL,
 } from "@constants/CustomizerTabs";
 import { TextureType } from "@components/Pickers/FilePicker";
+import { FiArrowLeft } from "react-icons/fi";
 
 // Define types
 type ActiveFilterType = {
@@ -34,8 +36,12 @@ export type CustomizerState = {
   color: string;
 } & ActiveFilterType;
 
+type Props = {
+  changeView: (value: boolean) => void;
+};
+
 // Main component
-const Customizer = () => {
+const Customizer = ({ changeView }: Props) => {
   // State variables
   const [file, setFile] = useState<File | undefined>(undefined);
   const [color, setColor] = useState<string>("#fff");
@@ -147,6 +153,18 @@ const Customizer = () => {
     <AnimatePresence>
       <>
         <motion.div
+          className="absolute top-20 right-4 z-10"
+          {...slideAnimation("right")}
+        >
+          <button
+            className="flex items-center p-2 bg-white border border-gray-300 rounded cursor-pointer"
+            onClick={() => changeView(false)}
+          >
+            <FiArrowLeft className="mr-1" />
+            Go Back
+          </button>
+        </motion.div>
+        <motion.div
           key="custom"
           className="absolute top-0 left-0 z-10"
           {...slideAnimation("left")}
@@ -184,4 +202,4 @@ const Customizer = () => {
   );
 };
 
-export default Customizer;
+export default React.memo(Customizer);
