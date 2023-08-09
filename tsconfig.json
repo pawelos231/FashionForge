@@ -13,7 +13,8 @@
       "@constants/*": ["constants/*"],
       "@config/*": ["config/*"],
       "@components/*": ["components/*"],
-      "@UI/*": ["UI/*"]
+      "@UI/*": ["UI/*"],
+      "@utils/*": ["utils/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

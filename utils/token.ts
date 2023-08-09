@@ -1,15 +1,20 @@
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
+import { Role } from "./role";
 
 export type Token = {
   name: string;
   email: string;
-  photo: string;
+  role: Role;
 };
 
 export enum TokenTypeEnum {
   refreshToken = "refreshToken",
   accessToken = "accessToken",
 }
+
+export const FIFTEEN_MINUTES = 900;
+export const TWO_WEEKS = 3600 * 24 * 14;
+export const REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 
 export async function sign(
   payload: Token,
@@ -20,9 +25,6 @@ export async function sign(
 
   //if refresh token then keep it for 14 days
   //if acess then keep it for 15 minutes
-
-  const FIFTEEN_MINUTES = 900;
-  const TWO_WEEKS = 3600 * 24 * 14;
 
   const exp: number =
     TokenTypeEnum.accessToken == tokenType
@@ -38,10 +40,18 @@ export async function sign(
 }
 
 export async function verify(token: string, secret: string): Promise<any> {
-  const { payload }: { payload: JWTPayload } = await jwtVerify(
-    token,
-    new TextEncoder().encode(secret)
-  );
+  try {
+    const { payload }: { payload: JWTPayload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(secret)
+    );
 
-  return payload;
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
+      throw new Error("Token has expired");
+    }
+
+    return payload;
+  } catch (error) {
+    throw new Error("Invalid token");
+  }
 }

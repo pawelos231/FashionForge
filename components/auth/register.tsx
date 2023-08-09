@@ -5,11 +5,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@UI/Button";
 import { RegisterValidator, RegisterRequest } from "@lib/validators/register";
 import Link from "next/link";
+import { wait } from "utils/wait";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 const RegisterComponent = () => {
+  const router = useRouter();
+
   const {
     register,
     watch,
+    setValue,
     handleSubmit,
     formState: { errors }, // Get the form validation errors
   } = useForm<RegisterRequest>({
@@ -21,8 +28,35 @@ const RegisterComponent = () => {
     },
   });
 
-  const sendLoginData = () => {
-    console.log(watch("email"), watch("password"));
+  const { mutate: registerFunc, isLoading } = useMutation({
+    mutationFn: async ({ email, password, name }: RegisterRequest) => {
+      const payload: RegisterRequest = { email, password, name };
+      await wait(1000); //delete later
+      const { data } = await axios.post("/api/auth/register", payload);
+      return data;
+    },
+    onError: (err: any) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+        }
+      }
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      router.refresh();
+      setValue("email", "");
+      setValue("password", "");
+      setValue("name", "");
+    },
+  });
+
+  const sendLoginData = async () => {
+    registerFunc({
+      email: watch("email"),
+      password: watch("password"),
+      name: watch("name"),
+    });
   };
 
   return (
@@ -77,6 +111,7 @@ const RegisterComponent = () => {
           )}
         </div>
         <Button
+          isLoading={isLoading}
           type="submit"
           className="w-full py-2 font-semibold text-white bg-blue-500 rounded-sm"
         >
