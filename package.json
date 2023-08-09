@@ -23,6 +23,7 @@
     "cmdk": "^0.2.0",
     "framer-motion": "^10.12.18",
     "image-compressor": "^2.0.3",
+    "jose": "^4.14.4",
     "lucide-react": "^0.263.1",
     "maath": "^0.7.0",
     "next": "13.4.9",
