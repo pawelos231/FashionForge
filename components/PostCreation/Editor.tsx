@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { memo } from "react";
 
@@ -23,18 +24,12 @@ const ToolbarView = {
 
 type Props = {
   HandleChange: (value: string) => void;
-  register: any;
 };
 
-const QuillTextEditor = ({ HandleChange, register }: Props): JSX.Element => {
+const QuillTextEditor = ({ HandleChange }: Props): JSX.Element => {
   return (
-    <div className="h-[80%]">
-      <Quill
-        className="h-full"
-        modules={ToolbarView}
-        theme="snow"
-        onChange={HandleChange}
-      />
+    <div className="h-[30%]">
+      <Quill modules={ToolbarView} theme="snow" onChange={HandleChange} />
     </div>
   );
 };

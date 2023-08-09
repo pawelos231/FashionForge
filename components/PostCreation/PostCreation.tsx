@@ -12,8 +12,6 @@ import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 interface PostCreationProps {}
 
 const PostCreation: React.FC<PostCreationProps> = () => {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [project, setProject] = useState<any>("");
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
@@ -32,14 +30,9 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     },
   });
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-
-  const handleContentChange = (value: string) => {
-    setContent(value);
+  const handleContentChange = useCallback((value: string) => {
     setValue("content", value);
-  };
+  }, []);
 
   const handleChangeProjectViewState = useCallback((val: boolean) => {
     setViewProjectOpen(val);
@@ -50,8 +43,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     console.log(file);
     setImageFile(file || null);
   };
-
-  const handleProjectChange = () => {};
 
   const handlePostSubmit = () => {
     console.log(watch("title"), watch("content"));
@@ -72,8 +63,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
                 {...register("title")}
                 type="text"
                 className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                value={title}
-                onChange={handleTitleChange}
                 placeholder="Enter post title"
               />
               {errors.title && (
@@ -95,9 +84,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
               <label className="block text-sm font-medium mb-2">Content</label>
               <QuillTextEditor
                 HandleChange={handleContentChange}
-                register={register("content", {
-                  required: "Content is required",
-                })}
+                {...register("content")}
               />
               {errors.content && (
                 <div className="text-red-500">{errors.content.message}</div>
