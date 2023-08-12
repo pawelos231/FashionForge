@@ -18,7 +18,7 @@ const RegisterComponent = () => {
     watch,
     setValue,
     handleSubmit,
-    formState: { errors }, // Get the form validation errors
+    formState: { errors },
   } = useForm<RegisterRequest>({
     resolver: yupResolver(RegisterValidator),
     defaultValues: {
