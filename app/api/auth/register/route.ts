@@ -59,6 +59,9 @@ export async function POST(req) {
     return response;
   } catch (error) {
     console.error("Error during registration:", error);
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json(
+      { error: "An error occurred while processing your request" },
+      { status: 500 }
+    );
   }
 }

@@ -11,6 +11,7 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+import { useEffect } from "react";
 
 type ReturnTypeToken = {
   accessToken: string;
@@ -21,9 +22,11 @@ const RegisterComponent = () => {
   const { storageVal: storage, updateLocalStorage: setStorage } =
     useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
 
-  if (storage) {
-    router.push("/");
-  }
+  const clearInputs = () => {
+    setValue("email", "");
+    setValue("password", "");
+    setValue("name", "");
+  };
 
   const {
     register,
@@ -51,16 +54,15 @@ const RegisterComponent = () => {
       console.log(err.response?.data.error);
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
+          console.log("not found");
         }
       }
     },
     onSuccess: (data: ReturnTypeToken) => {
-      setStorage(data);
+      setStorage(data.accessToken);
 
       router.refresh();
-      setValue("email", "");
-      setValue("password", "");
-      setValue("name", "");
+      clearInputs();
       router.push("/");
     },
   });
@@ -72,6 +74,10 @@ const RegisterComponent = () => {
       name: watch("name"),
     });
   };
+
+  useEffect(() => {
+    if (storage) router.push("/");
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

@@ -9,9 +9,23 @@ import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { wait } from "utils/wait";
+import useLocalStorage from "@hooks/useLocalStorage";
+import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+import { useEffect } from "react";
+
+type ReturnTypeToken = {
+  accessToken: string;
+};
 
 const LoginComponent = () => {
   const router = useRouter();
+  const { storageVal: storage, updateLocalStorage: setStorage } =
+    useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+
+  const clearInputs = () => {
+    setValue("email", "");
+    setValue("password", "");
+  };
 
   const {
     register,
@@ -41,19 +55,21 @@ const LoginComponent = () => {
         }
       }
     },
-    onSuccess: () => {
-      console.log("success");
+    onSuccess: (data: ReturnTypeToken) => {
+      setStorage(data.accessToken);
       router.refresh();
-      setValue("email", "");
-      setValue("password", "");
+      clearInputs();
+      router.push("/");
     },
   });
 
   const sendLoginData = async () => {
-    console.log(
-      await login({ email: watch("email"), password: watch("password") })
-    );
+    login({ email: watch("email"), password: watch("password") });
   };
+
+  useEffect(() => {
+    if (storage) router.push("/");
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
