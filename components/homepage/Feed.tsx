@@ -9,14 +9,24 @@ const Feed = async () => {
       createdAt: "desc",
     },
     include: {
-      auhor: true,
+      auhor: {
+        select: {
+          name: true,
+          photoLink: true,
+          createdAt: true,
+          updateAt: true,
+          role: true,
+          commentsLikes: true,
+          postLikes: true,
+        },
+      },
       comments: true,
       votes: true,
     },
     take: PAGES_TO_FETCH,
   });
 
-  return <PostFeed posts={posts as unknown as ExtendedPost[]} />;
+  return <PostFeed initialPosts={posts as unknown as ExtendedPost[]} />;
 };
 
 export default Feed;
