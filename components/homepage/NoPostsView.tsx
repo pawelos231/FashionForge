@@ -4,38 +4,26 @@ import { OrbitControls, Box } from "@react-three/drei";
 
 const NoPostsView = () => {
   return (
-    <div className="no-posts-container">
-      <div className="no-posts-content">
-        <Canvas camera={{ position: [0, 5, 15] }}>
-          <ambientLight intensity={0.5} />
+    <div className="flex items-center justify-center h-full">
+      <div className="w-[40%] h-[30%] p-6 bg-white ">
+        <Canvas
+          camera={{ position: [0, 5, 10], fov: 25 }}
+          gl={{ preserveDrawingBuffer: false }}
+          className="w-[80%]  h-[80%] transition-all duration-0 ease-in"
+        >
+          <ambientLight intensity={0.1} />
           <pointLight position={[10, 10, 10]} />
           <OrbitControls />
-          <Box args={[10, 10, 10]} position={[0, 0, 0]} />
+          <mesh>
+            <boxGeometry args={[2, 2, 2]} />
+            <meshStandardMaterial color="hotpink" />
+          </mesh>
           {/* Use the Box component */}
         </Canvas>
-        <p className="no-posts-text">Oops! No posts available.</p>
+        <p className="mt-6 text-xl font-semibold text-center">
+          Oops! No posts available.
+        </p>
       </div>
-      <style jsx>{`
-        .no-posts-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 100vh;
-          background-color: #f0f0f0;
-        }
-        .no-posts-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-        .no-posts-text {
-          font-size: 20px;
-          margin-top: 20px;
-          text-align: center;
-          color: #333;
-        }
-      `}</style>
     </div>
   );
 };
