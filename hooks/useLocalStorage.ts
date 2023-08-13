@@ -19,7 +19,7 @@ const useLocalStorage = <T>(key: string, value?: T) => {
     }
   });
 
-  const updateLocalStorage = <K>(newValue: updateValue<K>) => {
+  const updateLocalStorage = <K>(newValue: updateValue<K>): void => {
     if (typeof newValue == functionTypeName) {
       const fn = newValue as FuncType;
       setStorageVal(fn(storageVal));
@@ -34,7 +34,7 @@ const useLocalStorage = <T>(key: string, value?: T) => {
     localStorage.setItem(key, rawValue);
   }, [storageVal]);
 
-  return [storageVal, updateLocalStorage];
+  return { storageVal, updateLocalStorage };
 };
 
 export default useLocalStorage;

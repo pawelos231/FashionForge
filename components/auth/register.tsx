@@ -9,9 +9,21 @@ import { wait } from "utils/wait";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import useLocalStorage from "@hooks/useLocalStorage";
+import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+
+type ReturnTypeToken = {
+  accessToken: string;
+};
 
 const RegisterComponent = () => {
   const router = useRouter();
+  const { storageVal: storage, updateLocalStorage: setStorage } =
+    useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+
+  if (storage) {
+    router.push("/");
+  }
 
   const {
     register,
@@ -42,12 +54,14 @@ const RegisterComponent = () => {
         }
       }
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: (data: ReturnTypeToken) => {
+      setStorage(data);
+
       router.refresh();
       setValue("email", "");
       setValue("password", "");
       setValue("name", "");
+      router.push("/");
     },
   });
 

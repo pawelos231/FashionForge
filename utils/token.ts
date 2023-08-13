@@ -15,6 +15,7 @@ export enum TokenTypeEnum {
 export const FIFTEEN_MINUTES = 900;
 export const TWO_WEEKS = 3600 * 24 * 14;
 export const REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+export const ACCESS_TOKEN_LOCAL_STORAGE_NAME = "access_token";
 
 export async function sign(
   payload: Token,
