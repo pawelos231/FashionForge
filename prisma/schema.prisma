@@ -1,14 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VoteType {
+  UP
+  DOWN
 }
 
 enum Role {
@@ -27,8 +28,10 @@ model User {
   updateAt  DateTime @updatedAt
   role      Role     @default(USER)
 
-  comments Comment[]
-  projects Project[]
+  comments      Comment[]
+  posts         Post[]
+  commentsLikes CommentVote[]
+  postLikes     PostVote[]
 
   @@index([email])
 }
@@ -39,28 +42,58 @@ model Simple {
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  content   String
-  User      User?     @relation(fields: [userId], references: [id])
-  userId    Int?
-  Project   Project[]
+  id       Int           @id @default(autoincrement())
+  user     User          @relation(fields: [userId], references: [id])
+  post     Post          @relation(fields: [postId], references: [id])
+  parent   Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  children Comment[]     @relation("ParentChild")
+  likes    CommentVote[]
 
-  @@index([userId])
-}
-
-model Project {
-  id        Int      @id @default(autoincrement())
-  upVotes   Int
-  DownVotes Int
-  auhor     User     @relation(fields: [userId], references: [id])
-  userId    Int
-  blobLink  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
-  comments  Comment  @relation(fields: [commentId], references: [id])
+  content   String
+  userId    Int
+  postId    Int
+  parentId  Int?
+
+  @@index([userId])
+  @@index([postId])
+}
+
+model CommentVote {
+  user      User     @relation(fields: [userId], references: [id])
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  userId    Int
   commentId Int
+  type      VoteType
+
+  @@id([commentId, userId])
+}
+
+model PostVote {
+  user   User @relation(fields: [userId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+  userId Int
+  postId Int
+
+  @@id([postId, userId])
+}
+
+model Post {
+  id    Int  @id @default(autoincrement())
+  auhor User @relation(fields: [userId], references: [id])
+
+  upVotes   Int
+  DownVotes Int
+  userId    Int
+  blobLink  String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  comments  Comment[]
+  commentId Int
+
+  content  String
+  PostLike PostVote[]
 
   @@index([userId])
   @@index([commentId])
