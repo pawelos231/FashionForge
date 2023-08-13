@@ -5,6 +5,8 @@ import { Environment, Center } from "@react-three/drei";
 import Shirt from "./Shirt";
 import CameraRig from "./CameraRig";
 import Backdrop from "./Backdrop";
+import { Suspense } from "react";
+import ShirtLoader from "./Loading";
 
 type Props = {
   state: CustomizerState;
@@ -18,13 +20,15 @@ const CanvasMod = ({ state }: Props) => {
       gl={{ preserveDrawingBuffer: true }}
       className="w-full max-w-full h-full transition-all duration-0 ease-in"
     >
-      <ambientLight intensity={0.1} />
       <Environment preset="city" />
       <CameraRig>
-        <Backdrop />
-        <Center>
-          <Shirt PassedState={state} />
-        </Center>
+        <Suspense fallback={<ShirtLoader />}>
+          <Backdrop />
+          <ambientLight intensity={0.1} />
+          <Center>
+            <Shirt PassedState={state} />
+          </Center>
+        </Suspense>
       </CameraRig>
     </Canvas>
   );
