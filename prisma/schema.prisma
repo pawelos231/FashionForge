@@ -71,10 +71,11 @@ model CommentVote {
 }
 
 model PostVote {
-  user   User @relation(fields: [userId], references: [id])
-  post   Post @relation(fields: [postId], references: [id])
+  user   User     @relation(fields: [userId], references: [id])
+  post   Post     @relation(fields: [postId], references: [id])
   userId Int
   postId Int
+  type   VoteType
 
   @@id([postId, userId])
 }
@@ -83,8 +84,7 @@ model Post {
   id    Int  @id @default(autoincrement())
   auhor User @relation(fields: [userId], references: [id])
 
-  upVotes   Int
-  DownVotes Int
+  title     String
   userId    Int
   blobLink  String
   createdAt DateTime  @default(now())
@@ -92,8 +92,8 @@ model Post {
   comments  Comment[]
   commentId Int
 
-  content  String
-  PostLike PostVote[]
+  content String
+  votes   PostVote[]
 
   @@index([userId])
   @@index([commentId])

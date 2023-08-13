@@ -42,18 +42,20 @@ export async function POST(req: Request) {
       sign(claims, process.env.REFRESH_TK_SECRET!, TokenTypeEnum.refreshToken),
     ]);
 
-
     const response = NextResponse.json(
       { accessToken: accessJWT },
       { status: 200 }
     );
+    
     response.cookies.set({
       name: REFRESH_TOKEN_COOKIE_NAME,
       value: refreshJWT,
       httpOnly: true,
       maxAge: TWO_WEEKS,
     });
+
     return response;
+
   } catch (error) {
     console.error("An error occurred:", error);
     return NextResponse.json(
