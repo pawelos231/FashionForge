@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 type FuncType = <T>(val: T) => any;
 type updateValue<K> = K extends Function ? FuncType : K;
 
-const functionTypeName = "function";
-
 const useLocalStorage = <T>(key: string, value?: T) => {
-  const [storageVal, setStorageVal] = useState<T>(() => {
+  const [storageVal, setStorageVal] = useState(() => {
     try {
       const val = localStorage.getItem(key);
       if (val) {
@@ -20,11 +18,11 @@ const useLocalStorage = <T>(key: string, value?: T) => {
   });
 
   const updateLocalStorage = <K>(newValue: updateValue<K>): void => {
-    if (typeof newValue == functionTypeName) {
-      const fn = newValue as FuncType;
+    if (newValue instanceof Function) {
+      const fn = newValue;
       setStorageVal(fn(storageVal));
     } else {
-      const val = newValue as any;
+      const val = newValue as K;
       setStorageVal(val);
     }
   };
@@ -34,7 +32,7 @@ const useLocalStorage = <T>(key: string, value?: T) => {
     localStorage.setItem(key, rawValue);
   }, [storageVal]);
 
-  return { storageVal, updateLocalStorage };
+  return { storage: storageVal, setStorage: updateLocalStorage };
 };
 
 export default useLocalStorage;

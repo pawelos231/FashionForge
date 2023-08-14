@@ -10,12 +10,7 @@ export const LoginValidator = yup.object().shape({
     .min(10, lessMore("email", MoreLess.more, 10))
     .max(60, lessMore("email", MoreLess.less, 60))
     .matches(EMAIL_VALIDATOR, "invalid email"),
-  password: yup
-    .string()
-    .required("password is required")
-    .min(10, lessMore("password", MoreLess.more, 10))
-    .max(32, lessMore("password", MoreLess.less, 32))
-    .matches(PASSWORD_VALIDATIOR, PASSWORD_VALIDATION_MESS),
+  password: yup.string().required("password is required"),
 });
 
 export type LoginRequest = Required<yup.InferType<typeof LoginValidator>>;

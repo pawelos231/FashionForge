@@ -19,8 +19,9 @@ type ReturnTypeToken = {
 
 const RegisterComponent = () => {
   const router = useRouter();
-  const { storageVal: storage, updateLocalStorage: setStorage } =
-    useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+  const { storage, setStorage } = useLocalStorage<string>(
+    ACCESS_TOKEN_LOCAL_STORAGE_NAME
+  );
 
   const clearInputs = () => {
     setValue("email", "");

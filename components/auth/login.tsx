@@ -19,7 +19,7 @@ type ReturnTypeToken = {
 
 const LoginComponent = () => {
   const router = useRouter();
-  const { storageVal: storage, updateLocalStorage: setStorage } =
+  const { storage, setStorage } =
     useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
 
   const clearInputs = () => {
