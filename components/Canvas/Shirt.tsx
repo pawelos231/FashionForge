@@ -18,7 +18,7 @@ const Shirt = ({ PassedState }: Props) => {
     easing.dampC(materials.lambert1.color, PassedState.color, 0.25, delta);
   });
 
-  const stateString = JSON.stringify(Math.random());
+  const stateString = JSON.stringify(PassedState);
 
   return (
     <group key={stateString}>

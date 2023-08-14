@@ -1,6 +1,6 @@
 import * as yup from "yup";
-import { EMAIL_VALIDATOR, PASSWORD_VALIDATIOR } from "@constants/regex";
-import { lessMore, MoreLess, PASSWORD_VALIDATION_MESS } from "./util";
+import { EMAIL_VALIDATOR } from "@constants/regex";
+import { lessMore, MoreLess } from "./util";
 
 export const LoginValidator = yup.object().shape({
   email: yup

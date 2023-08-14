@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import React from "react";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 
 const Backdrop = () => {
@@ -33,4 +34,4 @@ const Backdrop = () => {
   );
 };
 
-export default Backdrop;
+export default React.memo(Backdrop);

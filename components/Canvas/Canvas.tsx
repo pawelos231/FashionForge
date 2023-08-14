@@ -22,9 +22,9 @@ const CanvasMod = ({ state }: Props) => {
     >
       <Environment preset="city" />
       <CameraRig>
+        <ambientLight intensity={0.1} />
         <Suspense fallback={<ShirtLoader />}>
           <Backdrop />
-          <ambientLight intensity={0.1} />
           <Center>
             <Shirt PassedState={state} />
           </Center>
