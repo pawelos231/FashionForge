@@ -1,11 +1,14 @@
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Box } from "@react-three/drei";
+import React, { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import TorusLoader from "./Torus";
 
 const NoPostsView = () => {
+  const torusRef = useRef<any>();
+
   return (
     <div className="flex items-center justify-center h-full">
-      <div className="w-[40%] h-[30%] p-6 bg-white ">
+      <div className="w-[40%] h-[45%] p-6 bg-white ">
         <Canvas
           camera={{ position: [0, 5, 10], fov: 25 }}
           gl={{ preserveDrawingBuffer: false }}
@@ -13,12 +16,8 @@ const NoPostsView = () => {
         >
           <ambientLight intensity={0.1} />
           <pointLight position={[10, 10, 10]} />
+          <TorusLoader />
           <OrbitControls />
-          <mesh>
-            <boxGeometry args={[2, 2, 2]} />
-            <meshStandardMaterial color="hotpink" />
-          </mesh>
-          {/* Use the Box component */}
         </Canvas>
         <p className="mt-6 text-xl font-semibold text-center">
           Oops! No posts available.
