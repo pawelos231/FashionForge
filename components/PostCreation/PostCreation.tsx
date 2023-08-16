@@ -24,7 +24,7 @@ type SuccessfulPostCreation = {
 const PostCreation: React.FC<PostCreationProps> = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
-  const {storage: accessTokenStorage, setStorage} = useLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
+  const {storage: accessToken, setStorage} = useLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
 
   const {
     register,
@@ -69,6 +69,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       }
     },
     onSuccess: (data: SuccessfulPostCreation) => {
+      console.log(data)
       clearInputs()
       if(data.accessToken) setStorage(data.accessToken)
     },
