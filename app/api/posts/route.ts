@@ -24,12 +24,11 @@ export async function GET(req: Request) {
         createdAt: "desc",
       },
       include: {
-        auhor: {
+        author: {
           select: {
             name: true,
             photoLink: true,
             createdAt: true,
-            updateAt: true,
             role: true,
             commentsLikes: true,
             postLikes: true,

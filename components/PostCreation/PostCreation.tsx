@@ -9,14 +9,22 @@ import Customizer from "./Customizer";
 import { useCallback } from "react";
 import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 import { useMutation } from "@tanstack/react-query";
+import axios, {AxiosError} from "axios";
+import { wait } from "@utils/wait";
+import useLocalStorage from "@hooks/useLocalStorage";
+import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 
 interface PostCreationProps {}
 
-
+type SuccessfulPostCreation = {
+  message: string
+  accessToken: string | null
+}
 
 const PostCreation: React.FC<PostCreationProps> = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
+  const {storage: accessTokenStorage, setStorage} = useLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
 
   const {
     register,
@@ -32,17 +40,38 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     },
   });
 
+  const clearInputs = () => {
+    handleContentChange("")
+    setValue("content", "")
+    setValue("title", "")
+  }
 
   const {mutate: sendPost, isLoading} = useMutation({
     mutationFn: async ({title, content}: PostRequest) => {
-      
-    },
-    onSuccess: (data) => {
+        const payload: PostRequest = {title, content}
+        await wait(1000) //for debug 
 
-    },
-    onError: () => {
+        const headers = {
+          Authorization: accessToken, 
+        };
 
-    }
+        const {data} = await axios.post("/api/posts/create", payload, {headers})
+        return data
+    },
+    onError: (err: any) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          console.log("not found");
+        } if (err.response?.status === 401) {
+          console.log("unathorized")
+        }
+      }
+    },
+    onSuccess: (data: SuccessfulPostCreation) => {
+      clearInputs()
+      if(data.accessToken) setStorage(data.accessToken)
+    },
   })
 
 
@@ -59,8 +88,8 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     setImageFile(file || null);
   };
 
-  const handlePostSubmit = () => {
-    console.log(watch("title"), watch("content"));
+  const handlePostSubmit = async () => {
+    sendPost({title: watch("title"), content: watch("content")});
   };
 
   return (
@@ -123,7 +152,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
             <Button
               variant="outline"
               className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:outline-none"
-              onClick={handlePostSubmit}
               isLoading={isLoading}
             >
               Submit Post

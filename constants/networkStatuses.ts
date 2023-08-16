@@ -3,6 +3,8 @@ type NetworkStatus = {
   description: string;
 };
 
+
+
 const networkStatuses: NetworkStatus[] = [
   { status: 100, description: "Continue" },
   { status: 101, description: "Switching Protocols" },

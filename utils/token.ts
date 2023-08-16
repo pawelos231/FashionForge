@@ -12,10 +12,19 @@ export enum TokenTypeEnum {
   accessToken = "accessToken",
 }
 
+export type VerificationRequest = {
+  payload: null | JWTPayload
+  expired: boolean
+  error: boolean  
+}
+
+
 export const FIFTEEN_MINUTES = 900;
 export const TWO_WEEKS = 3600 * 24 * 14;
 export const REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 export const ACCESS_TOKEN_LOCAL_STORAGE_NAME = "access_token";
+
+const EXPIRED_CODE = "ERR_JWT_EXPIRED"
 
 export async function sign(
   payload: Token,
@@ -40,7 +49,7 @@ export async function sign(
     .sign(new TextEncoder().encode(secret));
 }
 
-export async function verify(token: string, secret: string): Promise<any> {
+export async function verify(token: string, secret: string): Promise<VerificationRequest> {
   try {
     const { payload }: { payload: JWTPayload } = await jwtVerify(
       token,
@@ -48,11 +57,30 @@ export async function verify(token: string, secret: string): Promise<any> {
     );
 
     if (payload.exp && Date.now() >= payload.exp * 1000) {
-      throw new Error("Token has expired");
+      return {payload: null, error: false, expired: true};
     }
 
-    return payload;
+    return {payload, error: false, expired: false};
   } catch (error) {
-    throw new Error("Invalid token");
+    if(error.code === EXPIRED_CODE){
+      return {payload: null, error: false, expired: true};
+    }
+    return {payload: null, error: true, expired: false};
   }
+}
+
+
+export const getNewAccessToken = async (refreshToken: JWTPayload): string => {
+  if(!refreshToken) throw new Error("no refresh token provided")
+  const {email, name, role} = refreshToken as Token
+
+  const claims: Token = {
+    email,
+    name,
+    role,
+  };
+
+  const accessJWT = await sign(claims, process.env.ACCESS_TK_SECRET!, TokenTypeEnum.accessToken)
+  return accessJWT
+  
 }

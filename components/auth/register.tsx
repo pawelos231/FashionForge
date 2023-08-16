@@ -6,7 +6,6 @@ import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterValidator, RegisterRequest } from "@lib/validators/register";
-import { wait } from "utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 import { Button } from "@UI/Button";
@@ -45,7 +44,6 @@ const RegisterComponent = () => {
   const { mutate: registerFunc, isLoading } = useMutation({
     mutationFn: async ({ email, password, name }: RegisterRequest) => {
       const payload: RegisterRequest = { email, password, name };
-      await wait(1000); //delete later
       const { data } = await axios.post("/api/auth/register", payload);
       return data;
     },
@@ -65,7 +63,7 @@ const RegisterComponent = () => {
     },
   });
 
-  const sendLoginData = async () => {
+  const sendLoginData = () => {
     registerFunc({
       email: watch("email"),
       password: watch("password"),

@@ -20,7 +20,7 @@ const useTimeout = <T extends Function>(callback: T, delay: number) => {
 
   useEffect(() => {
     set();
-    return () => clear();
+    return clear;
   }, [delay, set, clear]);
 
   const reset = useCallback(() => {
