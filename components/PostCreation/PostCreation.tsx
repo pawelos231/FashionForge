@@ -13,6 +13,7 @@ import axios, {AxiosError} from "axios";
 import { wait } from "@utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+import { redirect } from "next/navigation";
 
 interface PostCreationProps {}
 
@@ -64,7 +65,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
         if (err.response?.status === 404) {
           console.log("not found");
         } if (err.response?.status === 401) {
-          console.log("unathorized")
+          redirect('/')
         }
       }
     },

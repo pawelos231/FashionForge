@@ -1,6 +1,6 @@
 "use client";
 
-import RegisterComponent from "@components/Auth/register";
+import RegisterComponent from "@components/auth/register";
 
 const Register = () => {
   return <RegisterComponent />;

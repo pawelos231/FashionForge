@@ -3,7 +3,7 @@ import { Role } from "./role";
 
 export type Token = {
   name: string;
-  email: string;
+  id: number;
   role: Role;
 };
 
@@ -13,9 +13,18 @@ export enum TokenTypeEnum {
 }
 
 export type VerificationRequest = {
-  payload: null | JWTPayload
+  payload: null | VerifiedToken
   expired: boolean
   error: boolean  
+}
+
+export type VerifiedToken = {
+  name: string;
+  id: number;
+  role: Role;
+  exp: number,
+  iat: number
+  nbf: number
 }
 
 
@@ -60,7 +69,7 @@ export async function verify(token: string, secret: string): Promise<Verificatio
       return {payload: null, error: false, expired: true};
     }
 
-    return {payload, error: false, expired: false};
+    return {payload: payload as VerifiedToken, error: false, expired: false};
   } catch (error) {
     if(error.code === EXPIRED_CODE){
       return {payload: null, error: false, expired: true};
@@ -70,12 +79,13 @@ export async function verify(token: string, secret: string): Promise<Verificatio
 }
 
 
-export const getNewAccessToken = async (refreshToken: JWTPayload): string => {
+export const getNewAccessToken = async (refreshToken: JWTPayload) => {
   if(!refreshToken) throw new Error("no refresh token provided")
-  const {email, name, role} = refreshToken as Token
+  
+  const {id, name, role} = refreshToken as Token
 
   const claims: Token = {
-    email,
+    id,
     name,
     role,
   };

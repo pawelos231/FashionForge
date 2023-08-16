@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     }
 
     const claims: Token = {
-      email: existingUser.email,
+      id: existingUser.id,
       name: existingUser.name,
       role: existingUser.role as Role,
     };

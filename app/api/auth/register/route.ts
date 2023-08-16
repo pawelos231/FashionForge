@@ -15,6 +15,7 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const existingUser = await db.user.findUnique({ where: { email } });
+    
     if (existingUser) {
       return NextResponse.json(
         { error: "user already exists" },
@@ -27,15 +28,12 @@ export async function POST(req) {
         name,
         email,
         password: hashedPassword,
-        photoLink: "",
-        description: "",
-        socialLinks: [""],
         role: Role.USER,
       },
     });
 
     const claims: Token = {
-      email: newUser.email,
+      id: newUser.id,
       name: newUser.name,
       role: newUser.role as Role,
     };
