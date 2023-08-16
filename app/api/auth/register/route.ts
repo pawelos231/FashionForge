@@ -28,6 +28,8 @@ export async function POST(req) {
         email,
         password: hashedPassword,
         photoLink: "",
+        description: "",
+        socialLinks: [""],
         role: Role.USER,
       },
     });

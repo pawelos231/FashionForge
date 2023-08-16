@@ -8,12 +8,14 @@ import QuillTextEditor from "./Editor";
 import Customizer from "./Customizer";
 import { useCallback } from "react";
 import { PostValidator, PostRequest } from "@lib/validators/postCreation";
+import { useMutation } from "@tanstack/react-query";
 
 interface PostCreationProps {}
 
+
+
 const PostCreation: React.FC<PostCreationProps> = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [project, setProject] = useState<any>("");
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
 
   const {
@@ -30,6 +32,20 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     },
   });
 
+
+  const {mutate: sendPost, isLoading} = useMutation({
+    mutationFn: async ({title, content}: PostRequest) => {
+      
+    },
+    onSuccess: (data) => {
+
+    },
+    onError: () => {
+
+    }
+  })
+
+
   const handleContentChange = useCallback((value: string) => {
     setValue("content", value);
   }, []);
@@ -40,7 +56,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
     setImageFile(file || null);
   };
 
@@ -109,6 +124,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
               variant="outline"
               className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:outline-none"
               onClick={handlePostSubmit}
+              isLoading={isLoading}
             >
               Submit Post
             </Button>

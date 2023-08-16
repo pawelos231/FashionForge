@@ -19,19 +19,21 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  password  String
-  photoLink String
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  role      Role     @default(USER)
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  name        String
+  password    String
+  photoLink   String    @default("")
+  description String    @default("")
+  socialLinks String[]  @default([""])
+  role        Role      @default(USER)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  comments      Comment[]
-  posts         Post[]
+  posts       Post[]
   commentsLikes CommentVote[]
   postLikes     PostVote[]
+  comments    Comment[]
 
   @@index([email])
 }
@@ -42,58 +44,61 @@ model Simple {
 }
 
 model Comment {
-  id       Int           @id @default(autoincrement())
-  user     User          @relation(fields: [userId], references: [id])
-  post     Post          @relation(fields: [postId], references: [id])
-  parent   Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  children Comment[]     @relation("ParentChild")
+  id        Int       @id @default(autoincrement())
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user     User       @relation(fields: [userId], references: [id])
+  post     Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent   Comment?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  children Comment[]  @relation("ParentChild")
   likes    CommentVote[]
 
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  content   String
-  userId    Int
-  postId    Int
-  parentId  Int?
+  userId   Int
+  postId   Int
+  parentId Int?
 
   @@index([userId])
   @@index([postId])
 }
 
 model CommentVote {
-  user      User     @relation(fields: [userId], references: [id])
-  comment   Comment  @relation(fields: [commentId], references: [id])
   userId    Int
   commentId Int
   type      VoteType
+
+  user      User    @relation(fields: [userId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id])
 
   @@id([commentId, userId])
 }
 
 model PostVote {
-  user   User     @relation(fields: [userId], references: [id])
-  post   Post     @relation(fields: [postId], references: [id])
   userId Int
   postId Int
   type   VoteType
+
+  user   User    @relation(fields: [userId], references: [id])
+  post   Post    @relation(fields: [postId], references: [id])
 
   @@id([postId, userId])
 }
 
 model Post {
-  id    Int  @id @default(autoincrement())
-  auhor User @relation(fields: [userId], references: [id])
-
+  id        Int        @id @default(autoincrement())
   title     String
-  userId    Int
   blobLink  String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  content   String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  author    User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   comments  Comment[]
+  votes     PostVote[]
   commentId Int
 
-  content String
-  votes   PostVote[]
+  userId    Int
 
   @@index([userId])
   @@index([commentId])

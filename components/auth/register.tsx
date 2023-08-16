@@ -1,17 +1,15 @@
-"use client";
-
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@UI/Button";
-import { RegisterValidator, RegisterRequest } from "@lib/validators/register";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { wait } from "utils/wait";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { RegisterValidator, RegisterRequest } from "@lib/validators/register";
+import { wait } from "utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
-import { useEffect } from "react";
+import { Button } from "@UI/Button";
 
 type ReturnTypeToken = {
   accessToken: string;
@@ -22,12 +20,6 @@ const RegisterComponent = () => {
   const { storage, setStorage } = useLocalStorage<string>(
     ACCESS_TOKEN_LOCAL_STORAGE_NAME
   );
-
-  const clearInputs = () => {
-    setValue("email", "");
-    setValue("password", "");
-    setValue("name", "");
-  };
 
   const {
     register,
@@ -43,6 +35,12 @@ const RegisterComponent = () => {
       name: "",
     },
   });
+
+  const clearInputs = () => {
+    setValue("email", "");
+    setValue("password", "");
+    setValue("name", "");
+  };
 
   const { mutate: registerFunc, isLoading } = useMutation({
     mutationFn: async ({ email, password, name }: RegisterRequest) => {
@@ -61,7 +59,6 @@ const RegisterComponent = () => {
     },
     onSuccess: (data: ReturnTypeToken) => {
       setStorage(data.accessToken);
-
       router.refresh();
       clearInputs();
       router.push("/");
@@ -77,8 +74,10 @@ const RegisterComponent = () => {
   };
 
   useEffect(() => {
-    if (storage) router.push("/");
-  }, []);
+    if (storage) {
+      router.push("/");
+    }
+  }, [storage]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -138,7 +137,7 @@ const RegisterComponent = () => {
         >
           Register
         </Button>
-        <Link href={"/login"}>
+        <Link href="/login">
           <p className="text-center mt-5 transition-all duration-75 hover:scale-95 cursor-pointer">
             I want to login
           </p>
