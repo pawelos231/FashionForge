@@ -26,15 +26,10 @@ const style = {
   },
 };
 
+//switch to Editor.js later and use this Output
+
 const EditorOutput: FC<EditorOutputProps> = ({ content }) => {
-  return (
-    <Output
-      style={style}
-      className="text-sm"
-      renderers={renderers}
-      data={content}
-    />
-  );
+  return <div dangerouslySetInnerHTML={{ __html: content }}></div>;
 };
 
 export default EditorOutput;

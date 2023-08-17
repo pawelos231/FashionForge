@@ -40,7 +40,7 @@ const Post = forwardRef(
             ref={pRef}
           >
             <EditorOutput content={post.content} />
-            {pRef.current?.clientHeight! >= 130 ? (
+            {pRef.current?.clientHeight! >= 140 ? (
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
             ) : null}
           </div>
