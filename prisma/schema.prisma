@@ -19,16 +19,16 @@ enum Role {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
   name        String
   password    String
-  photoLink   String    @default("")
-  description String    @default("")
-  socialLinks String[]  @default([""])
-  role        Role      @default(USER)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  photoLink   String   @default("")
+  description String   @default("")
+  socialLinks String[] @default([""])
+  role        Role     @default(USER)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   posts         Post[]
   commentsLikes CommentVote[]
@@ -39,15 +39,15 @@ model User {
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user     User       @relation(fields: [userId], references: [id])
-  post     Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  parent   Comment?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  children Comment[]  @relation("ParentChild")
+  user     User          @relation(fields: [userId], references: [id])
+  post     Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent   Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  children Comment[]     @relation("ParentChild")
   likes    CommentVote[]
 
   userId   Int
@@ -63,8 +63,8 @@ model CommentVote {
   commentId Int
   type      VoteType
 
-  user      User    @relation(fields: [userId], references: [id])
-  comment   Comment @relation(fields: [commentId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id])
 
   @@id([commentId, userId])
 }
@@ -74,25 +74,28 @@ model PostVote {
   postId Int
   type   VoteType
 
-  user   User    @relation(fields: [userId], references: [id])
-  post   Post    @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
 
   @@id([postId, userId])
 }
 
 model Post {
-  id        Int        @id @default(autoincrement())
-  title     String
-  blobLink  String
-  content   String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id               Int      @id @default(autoincrement())
+  title            String
+  modelPictureLink String   @default("")
+  modelLink        String   @default("")
+  fullTextureLink  String   @default("")
+  logoTextureLink  String   @default("")
+  content          String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  comments  Comment[]
-  votes     PostVote[]
+  author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  comments Comment[]
+  votes    PostVote[]
 
-  authorId    Int
+  authorId Int
 
   @@index([authorId])
 }

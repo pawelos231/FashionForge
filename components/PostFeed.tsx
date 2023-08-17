@@ -14,8 +14,8 @@ type Props = {
 
 const PostFeed = ({ initialPosts }: Props) => {
   const PostRef = useRef<HTMLElement>();
-
   const lastPostRef = useRef<HTMLElement>(null);
+
   const { isFetchingNextPage, fetchNextPage, hasNextPage, data } =
     useInfiniteQuery({
       queryKey: ["posts", "ininity"],
@@ -27,15 +27,24 @@ const PostFeed = ({ initialPosts }: Props) => {
       getNextPageParam: (_, pages) => pages.length + 1,
     });
 
-  const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
-  console.log(posts);
+  const postsFromApi = data?.pages.flatMap((page) => page);
+  const posts =
+    !postsFromApi || postsFromApi.length === 0 ? initialPosts : postsFromApi;
+
   if (posts.length === 0) {
     return <NoPostsView />;
   }
+
   return (
-    <div className="">
+    <div className="flex justify-center items-center h-full">
       {posts.map((post, i) => {
-        return <div key={i}>{post.title}</div>;
+        return (
+          <Post
+            likesAmount={post.votes.length}
+            commentsAmount={post.comments.length}
+            post={post}
+          />
+        );
       })}
     </div>
   );

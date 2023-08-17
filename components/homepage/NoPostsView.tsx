@@ -1,11 +1,9 @@
-import React, { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import React from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import TorusLoader from "./Torus";
 
 const NoPostsView = () => {
-  const torusRef = useRef<any>();
-
   return (
     <div className="flex items-center justify-center h-full">
       <div className="w-[40%] h-[45%] p-6 bg-white ">

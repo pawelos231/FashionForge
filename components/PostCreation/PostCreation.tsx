@@ -9,23 +9,31 @@ import Customizer from "./Customizer";
 import { useCallback } from "react";
 import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 import { useMutation } from "@tanstack/react-query";
-import axios, {AxiosError} from "axios";
+import axios, { AxiosError } from "axios";
 import { wait } from "@utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 import { redirect } from "next/navigation";
+import { Post } from "@prisma/client";
 
 interface PostCreationProps {}
 
 type SuccessfulPostCreation = {
-  message: string
-  accessToken: string | null
-}
+  message: string;
+  accessToken: string | null;
+  post: Post;
+};
+
+type Headers = {
+  Authorization: string;
+};
 
 const PostCreation: React.FC<PostCreationProps> = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
-  const {storage: accessToken, setStorage} = useLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
+  const { storage: accessToken, setStorage } = useLocalStorage(
+    ACCESS_TOKEN_LOCAL_STORAGE_NAME
+  );
 
   const {
     register,
@@ -42,40 +50,42 @@ const PostCreation: React.FC<PostCreationProps> = () => {
   });
 
   const clearInputs = () => {
-    handleContentChange("")
-    setValue("content", "")
-    setValue("title", "")
-  }
+    handleContentChange("");
+    setValue("content", "");
+    setValue("title", "");
+  };
 
-  const {mutate: sendPost, isLoading} = useMutation({
-    mutationFn: async ({title, content}: PostRequest) => {
-        const payload: PostRequest = {title, content}
-        await wait(1000) //for debug 
+  const { mutate: sendPost, isLoading } = useMutation({
+    mutationFn: async ({ title, content }: PostRequest) => {
+      const payload: PostRequest = { title, content };
+      await wait(1000);
 
-        const headers = {
-          Authorization: accessToken, 
-        };
+      const headers: Headers = {
+        Authorization: accessToken,
+      };
 
-        const {data} = await axios.post("/api/posts/create", payload, {headers})
-        return data
+      const { data } = await axios.post("/api/posts/create", payload, {
+        headers,
+      });
+      return data;
     },
     onError: (err: any) => {
       console.log(err.response?.data.error);
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
           console.log("not found");
-        } if (err.response?.status === 401) {
-          redirect('/')
+        }
+        if (err.response?.status === 401) {
+          redirect("/");
         }
       }
     },
     onSuccess: (data: SuccessfulPostCreation) => {
-      console.log(data)
-      clearInputs()
-      if(data.accessToken) setStorage(data.accessToken)
+      clearInputs();
+      if (data.accessToken) setStorage(data.accessToken);
+      console.log(data.post);
     },
-  })
-
+  });
 
   const handleContentChange = useCallback((value: string) => {
     setValue("content", value);
@@ -91,7 +101,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
   };
 
   const handlePostSubmit = async () => {
-    sendPost({title: watch("title"), content: watch("content")});
+    sendPost({ title: watch("title"), content: watch("content") });
   };
 
   return (

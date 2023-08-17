@@ -29,7 +29,7 @@ type Props = {
 const QuillTextEditor = React.forwardRef(({ HandleChange }: Props): JSX.Element => {
   return (
     <div className="h-[30%]">
-      <Quill modules={ToolbarView} theme="snow" onChange={HandleChange} />
+      <Quill modules={ToolbarView} theme="snow" onChange={HandleChange}/>
     </div>
   );
 });
