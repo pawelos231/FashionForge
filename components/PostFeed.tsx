@@ -36,16 +36,15 @@ const PostFeed = ({ initialPosts }: Props) => {
   }
 
   return (
-    <div className="flex justify-center items-center h-full">
-      {posts.map((post, i) => {
-        return (
-          <Post
-            likesAmount={post.votes.length}
-            commentsAmount={post.comments.length}
-            post={post}
-          />
-        );
-      })}
+    <div className="flex flex-col items-center space-y-6 py-6">
+      {posts.map((post, i) => (
+        <Post
+          key={i}
+          likesAmount={post.votes.length}
+          commentsAmount={post.comments.length}
+          post={post}
+        />
+      ))}
     </div>
   );
 };
