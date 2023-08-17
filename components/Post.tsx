@@ -1,16 +1,18 @@
-"use client";
-
 import { forwardRef, useRef } from "react";
 import { formatTimeToNow } from "@lib/utils";
 import { ExtendedPost } from "interfaces/db";
-import { Icons } from "@UI/Icons"; // Assuming you have icon components
+import { Icons } from "@UI/Icons";
 import EditorOutput from "./EditorOutput";
+import Image from "next/image";
+import { shimmer, toBase64 } from "./Loaders/Shimmer";
 
 type PostProps = {
   likesAmount: number;
   commentsAmount: number;
   post: ExtendedPost;
 };
+
+const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
 
 const Post = forwardRef(
   ({ likesAmount, commentsAmount, post }: PostProps, ref) => {
@@ -19,9 +21,25 @@ const Post = forwardRef(
     return (
       <>
         <div className="px-6 py-4 space-y-4">
-          <div className="flex items-center space-x-2">
-            <Icons.heart className="h-5 w-5 text-red-500" />
-            <span className="text-gray-600">{likesAmount}</span>
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0 w-[7%]">
+              <Image
+                placeholder="blur"
+                layout="responsive"
+                width={20}
+                height={20}
+                blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                  shimmer(100, 60)
+                )}`}
+                className="h-10 w-10 rounded-full"
+                src={post.author.photoLink || defaultProfilePicture}
+                alt={`${post.author.name}'s Profile`}
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Icons.heart className="h-5 w-5 text-red-500" />
+              <span className="text-gray-600">{likesAmount}</span>
+            </div>
           </div>
 
           <div className="text-xs text-gray-500">
