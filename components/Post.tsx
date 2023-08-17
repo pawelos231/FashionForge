@@ -17,7 +17,7 @@ const Post = forwardRef(
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return (
-      <div className="rounded-md bg-white shadow-md w-[50%]">
+      <>
         <div className="px-6 py-4 space-y-4">
           <div className="flex items-center space-x-2">
             <Icons.heart className="h-5 w-5 text-red-500" />
@@ -40,7 +40,7 @@ const Post = forwardRef(
             ref={pRef}
           >
             <EditorOutput content={post.content} />
-            {pRef.current?.clientHeight! >= 140 ? (
+            {pRef.current?.clientHeight! >= 160 ? (
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
             ) : null}
           </div>
@@ -50,7 +50,7 @@ const Post = forwardRef(
           <Icons.message className="h-5 w-5 text-gray-600" />
           <span className="text-gray-600">{commentsAmount} comments</span>
         </div>
-      </div>
+      </>
     );
   }
 );

@@ -4,7 +4,7 @@ import { PAGES_TO_FETCH } from "@constants/config";
 import { ExtendedPost } from "@interfaces/db";
 
 const Feed = async () => {
-  const posts = await db.post.findMany({
+  const postsPromise = db.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -25,7 +25,19 @@ const Feed = async () => {
     take: PAGES_TO_FETCH,
   });
 
-  return <PostFeed initialPosts={posts as unknown as ExtendedPost[]} />;
+  const countPostsPromise = db.post.count();
+
+  const [posts, postsCount] = await Promise.all([
+    postsPromise,
+    countPostsPromise,
+  ]);
+
+  return (
+    <PostFeed
+      initialPosts={posts as unknown as ExtendedPost[]}
+      postsCount={postsCount}
+    />
+  );
 };
 
 export default Feed;

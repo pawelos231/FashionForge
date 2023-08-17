@@ -1,7 +1,6 @@
 import { db } from "@lib/db";
 import { NextResponse } from "next/server";
 import * as yup from "yup";
-import { PAGES_TO_FETCH } from "@constants/config";
 
 const ERROR_MESSAGE = "Error while fetching posts :(";
 
@@ -20,6 +19,8 @@ export async function GET(req: Request) {
     });
 
     const posts = await db.post.findMany({
+      skip: (Number(page) - 1) * Number(limit),
+      take: Number(limit),
       orderBy: {
         createdAt: "desc",
       },
@@ -37,15 +38,9 @@ export async function GET(req: Request) {
         comments: true,
         votes: true,
       },
-      skip: Number(page) * Number(limit),
-      take: PAGES_TO_FETCH,
     });
 
-    return NextResponse.json(
-      posts,
-
-      { status: 200 }
-    );
+    return NextResponse.json(posts, { status: 200 });
   } catch (err) {
     return NextResponse.json(
       {

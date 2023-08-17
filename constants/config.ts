@@ -1,1 +1,1 @@
-export const PAGES_TO_FETCH = 10;
+export const PAGES_TO_FETCH = 4;
