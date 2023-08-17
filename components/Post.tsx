@@ -1,7 +1,10 @@
+"use client";
+
 import { forwardRef, useRef } from "react";
 import { formatTimeToNow } from "@lib/utils";
 import { ExtendedPost } from "interfaces/db";
 import { Icons } from "@UI/Icons"; // Assuming you have icon components
+import EditorOutput from "./EditorOutput";
 
 type PostProps = {
   likesAmount: number;
@@ -14,7 +17,7 @@ const Post = forwardRef(
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return (
-      <div className="rounded-md bg-white shadow-md">
+      <div className="rounded-md bg-white shadow-md w-[50%]">
         <div className="px-6 py-4 space-y-4">
           <div className="flex items-center space-x-2">
             <Icons.heart className="h-5 w-5 text-red-500" />
@@ -32,10 +35,14 @@ const Post = forwardRef(
             </h2>
           </a>
 
-          <div className="relative text-sm max-h-40 overflow-hidden" ref={pRef}>
-            {pRef.current?.clientHeight === 160 && (
+          <div
+            className="relative text-sm max-h-40 w-full overflow-clip"
+            ref={pRef}
+          >
+            <EditorOutput content={post.content} />
+            {pRef.current?.clientHeight! >= 130 ? (
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
-            )}
+            ) : null}
           </div>
         </div>
 

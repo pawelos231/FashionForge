@@ -36,7 +36,7 @@ const PostFeed = ({ initialPosts }: Props) => {
   }
 
   return (
-    <div className="flex flex-col items-center space-y-6 py-6">
+    <div className="flex flex-col items-center space-y-6 py-6 mt-10">
       {posts.map((post, i) => (
         <Post
           key={i}
