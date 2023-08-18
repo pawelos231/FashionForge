@@ -44,24 +44,33 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
           </div>
 
           <div className="w-full pr-4">
-            <p className="text-xs text-gray-500">
-              Posted by u/{post.author.name}{" "}
-              {formatTimeToNow(new Date(post?.createdAt))}
-            </p>
-            <h1 className="text-2xl font-semibold mt-2 text-gray-900">
-              {post.title}
-            </h1>
+            <div className="pb-24">
+              <p className="text-xs text-gray-500">
+                Posted by u/{post.author.name}{" "}
+                {formatTimeToNow(new Date(post?.createdAt))}
+              </p>
+              <h1 className="text-2xl font-semibold mt-2 text-gray-900">
+                {post.title}
+              </h1>
 
-            <EditorOutput content={post.content} />
+              <EditorOutput content={post.content} />
+            </div>
             <Suspense
               fallback={
-                <div className="mt-4 space-y-4">
+                <>
                   {Array(PAGES_TO_FETCH)
                     .fill("")
                     .map(() => {
-                      return <PostSkeleton key={Math.random()} />;
+                      return (
+                        <div
+                          className="rounded-md bg-white shadow-md w-[60%]"
+                          key={Math.random()}
+                        >
+                          <PostSkeleton key={Math.random()} />{" "}
+                        </div>
+                      );
                     })}
-                </div>
+                </>
               }
             >
               <CommentsSectionSkeleton />
@@ -79,7 +88,11 @@ const CommentsSectionSkeleton = () => {
       {Array(PAGES_TO_FETCH)
         .fill("")
         .map((_item, index) => {
-          return <PostSkeleton key={index} />;
+          return (
+            <div className="rounded-md bg-white shadow-md " key={Math.random()}>
+              <PostSkeleton key={Math.random()} />{" "}
+            </div>
+          );
         })}
     </div>
   );

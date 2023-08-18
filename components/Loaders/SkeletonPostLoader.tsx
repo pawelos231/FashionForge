@@ -3,9 +3,9 @@ import React from "react";
 const PostSkeleton = () => {
   return (
     <>
-      <div className="animate-pulse px-6 py-4 space-y-4">
+      <div className="w-full animate-pulse px-6 py-4 space-y-4">
         <div className="flex items-center space-x-4">
-          <div className="flex-shrink-0 w-[7%] h-10 w-10 bg-gray-300 rounded-full"></div>
+          <div className="flex-shrink-0 w-[7%] h-10  bg-gray-300 rounded-full"></div>
           <div className="flex items-center space-x-2">
             <div className="h-5 w-5 bg-gray-300 rounded-full"></div>
             <div className="h-5 w-12 bg-gray-300"></div>

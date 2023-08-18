@@ -30,7 +30,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
     useInfiniteQuery({
       queryKey: ["posts", "ininity"],
       queryFn: async ({ pageParam = 1 }) => {
-        await wait(1000); //for debug
+        await wait(5000); //for debug
         const query = `/api/posts?limit=${PAGES_TO_FETCH}&page=${pageParam}`;
         const { data } = (await axios.get(query)) as { data: ExtendedPost[] };
         return data;
@@ -92,7 +92,14 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
           {Array(PAGES_TO_FETCH)
             .fill("")
             .map(() => {
-              return <PostSkeleton key={Math.random()} />;
+              return (
+                <div
+                  className="rounded-md bg-white shadow-md w-[60%]"
+                  key={Math.random()}
+                >
+                  <PostSkeleton key={Math.random()} />{" "}
+                </div>
+              );
             })}
         </>
       )}
