@@ -7,7 +7,7 @@ import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "./Post";
 import axios from "axios";
 import NoPostsView from "./homepage/NoPostsView";
-import PostLoader from "./Loaders/SkeletonPostLoader";
+import PostSkeleton from "./Loaders/SkeletonPostLoader";
 import { useIntersection } from "@mantine/hooks";
 import { wait } from "@utils/wait";
 import { VoteType } from "@prisma/client";
@@ -92,7 +92,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
           {Array(PAGES_TO_FETCH)
             .fill("")
             .map(() => {
-              return <PostLoader key={Math.random()} />;
+              return <PostSkeleton key={Math.random()} />;
             })}
         </>
       )}

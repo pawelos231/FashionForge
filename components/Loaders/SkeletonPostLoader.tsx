@@ -1,28 +1,36 @@
 import React from "react";
 
-const PostLoader = () => {
+const PostSkeleton = () => {
   return (
-    <div className="rounded-md bg-white shadow-md w-[60%] animate-pulse">
-      <div className="px-6 py-4 space-y-4">
-        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+    <>
+      <div className="animate-pulse px-6 py-4 space-y-4">
+        <div className="flex items-center space-x-4">
+          <div className="flex-shrink-0 w-[7%] h-10 w-10 bg-gray-300 rounded-full"></div>
+          <div className="flex items-center space-x-2">
+            <div className="h-5 w-5 bg-gray-300 rounded-full"></div>
+            <div className="h-5 w-12 bg-gray-300"></div>
+          </div>
+        </div>
 
-        <div className="h-3 bg-gray-300 rounded w-1/4"></div>
+        <div className="text-xs text-gray-300">
+          <span className="font-medium bg-gray-300 h-4 w-20"></span>
+        </div>
 
-        <div className="h-3 bg-gray-300 rounded w-1/3"></div>
+        <a href="/">
+          <h2 className="text-lg font-semibold leading-tight text-gray-300 bg-gray-300 h-8 w-72"></h2>
+        </a>
 
-        <div className="h-3 bg-gray-300 rounded w-1/4"></div>
-
-        <div className="relative h-12 bg-gray-300 rounded">
-          <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
+        <div className="relative text-sm max-h-40 w-full overflow-clip">
+          <div className="bg-gray-300 h-36 w-full"></div>
         </div>
       </div>
 
       <div className="bg-gray-50 text-sm px-4 py-3 flex items-center space-x-2">
-        <div className="h-4 w-4 bg-gray-300 rounded"></div>
-        <div className="h-6 w-12 bg-gray-300 rounded"></div>
+        <div className="h-5 w-5 bg-gray-300 rounded-full"></div>
+        <span className="text-gray-300 bg-gray-300 h-4 w-12"></span>
       </div>
-    </div>
+    </>
   );
 };
 
-export default PostLoader;
+export default PostSkeleton;
