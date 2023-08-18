@@ -11,10 +11,13 @@ import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { wait } from "@utils/wait";
-import useLocalStorage from "@hooks/useLocalStorage";
-import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 import { redirect } from "next/navigation";
 import { Post } from "@prisma/client";
+import useToken from "@hooks/useToken";
+import {
+  ACCESS_TOKEN_LOCAL_STORAGE_NAME,
+  AuthorizationHeaders,
+} from "@utils/token";
 
 interface PostCreationProps {}
 
@@ -24,16 +27,10 @@ type SuccessfulPostCreation = {
   post: Post;
 };
 
-type Headers = {
-  Authorization: string;
-};
-
 const PostCreation: React.FC<PostCreationProps> = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
-  const { storage: accessToken, setStorage } = useLocalStorage(
-    ACCESS_TOKEN_LOCAL_STORAGE_NAME
-  );
+  const { token, setToken } = useToken();
 
   const {
     register,
@@ -60,8 +57,8 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       const payload: PostRequest = { title, content };
       await wait(1000);
 
-      const headers: Headers = {
-        Authorization: accessToken,
+      const headers: AuthorizationHeaders = {
+        Authorization: token,
       };
 
       const { data } = await axios.post("/api/posts/create", payload, {
@@ -76,13 +73,14 @@ const PostCreation: React.FC<PostCreationProps> = () => {
           console.log("not found");
         }
         if (err.response?.status === 401) {
-          redirect("/");
+          localStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+          redirect("/login");
         }
       }
     },
     onSuccess: (data: SuccessfulPostCreation) => {
       clearInputs();
-      if (data.accessToken) setStorage(data.accessToken);
+      if (data.accessToken) setToken(data.accessToken);
       console.log(data.post);
     },
   });

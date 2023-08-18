@@ -7,7 +7,7 @@ import Image from "next/image";
 import { shimmer, toBase64 } from "./Loaders/Shimmer";
 
 type PostProps = {
-  likesAmount: number;
+  votesAmount: number;
   commentsAmount: number;
   post: ExtendedPost;
 };
@@ -15,7 +15,7 @@ type PostProps = {
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
 
 const Post = forwardRef(
-  ({ likesAmount, commentsAmount, post }: PostProps, ref) => {
+  ({ votesAmount, commentsAmount, post }: PostProps, ref) => {
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return (
@@ -24,21 +24,21 @@ const Post = forwardRef(
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0 w-[7%]">
               <Image
-                placeholder="blur"
                 layout="responsive"
                 width={20}
                 height={20}
-                blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                  shimmer(100, 60)
-                )}`}
                 className="h-10 w-10 rounded-full"
                 src={post.author.photoLink || defaultProfilePicture}
                 alt={`${post.author.name}'s Profile`}
+                placeholder="blur"
+                blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                  shimmer(100, 60)
+                )}`}
               />
             </div>
             <div className="flex items-center space-x-2">
               <Icons.heart className="h-5 w-5 text-red-500" />
-              <span className="text-gray-600">{likesAmount}</span>
+              <span className="text-gray-600">{votesAmount}</span>
             </div>
           </div>
 

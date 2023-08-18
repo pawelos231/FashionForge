@@ -1,6 +1,6 @@
 import PostCreation from "@components/PostCreation/PostCreation";
 
-const Create = () => {
+const Page = () => {
   return (
     <section className="w-full h-full justify-center flex items-center">
       <PostCreation />
@@ -8,4 +8,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Page;

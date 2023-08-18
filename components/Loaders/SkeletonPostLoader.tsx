@@ -2,7 +2,7 @@ import React from "react";
 
 const PostLoader = () => {
   return (
-    <div className="rounded-md bg-white shadow-md w-[50%] animate-pulse">
+    <div className="rounded-md bg-white shadow-md w-[60%] animate-pulse">
       <div className="px-6 py-4 space-y-4">
         <div className="h-4 bg-gray-300 rounded w-1/2"></div>
 

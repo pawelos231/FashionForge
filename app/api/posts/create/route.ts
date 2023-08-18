@@ -3,11 +3,7 @@ import { headers } from "next/headers";
 import { PostRequest } from "@lib/validators/postCreation";
 import { verify } from "@utils/token";
 import { db } from "@lib/db";
-
-type AccessTokenHeaderType = {
-  changed: boolean;
-  accessToken: string;
-};
+import { AccessTokenHeaderType } from "@utils/token";
 
 type ExtendedPostRequest = {};
 
@@ -22,8 +18,14 @@ export async function POST(req, res) {
     verify(accessToken, process.env.ACCESS_TK_SECRET!),
   ]);
 
-  if (!userData.payload)
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
+  if (!userData.payload) {
+    return NextResponse.json(
+      { error: "Authorization failed" },
+      {
+        status: 401,
+      }
+    );
+  }
 
   const newPost = await db.post.create({
     data: {

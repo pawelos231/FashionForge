@@ -1,8 +1,8 @@
 "use client";
 
 import { ExtendedPost } from "interfaces/db";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "./Post";
 import axios from "axios";
@@ -10,6 +10,8 @@ import NoPostsView from "./homepage/NoPostsView";
 import PostLoader from "./Loaders/SkeletonPostLoader";
 import { useIntersection } from "@mantine/hooks";
 import { wait } from "@utils/wait";
+import { VoteType } from "@prisma/client";
+import { getUserData } from "@utils/getUserData";
 
 type Props = {
   initialPosts: ExtendedPost[];
@@ -50,26 +52,42 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
     }
   }, [entry, fetchNextPage]);
 
+  const userData = getUserData();
+
   if (posts.length === 0) {
     return <NoPostsView />;
   }
 
   return (
     <div className="flex flex-col items-center space-y-6 py-6 mt-10">
-      {posts.map((post, i) => (
-        <div
-          className="rounded-md bg-white shadow-md w-[50%]"
-          key={i}
-          ref={i == posts.length - 1 ? ref : null}
-        >
-          <Post
+      {posts.map((post, i) => {
+        const votes = post.votes.reduce((acc, curr) => {
+          if (curr.type === VoteType.UP) return acc + 1;
+          if (curr.type === VoteType.DOWN) return acc - 1;
+          return acc;
+        }, 0);
+
+        const currentVote = post.votes.find(
+          (vote) => vote.userId === userData?.user?.userData.id
+        );
+
+        //console.log(currentVote);
+
+        return (
+          <div
+            className="rounded-md bg-white shadow-md w-[60%]"
             key={i}
-            likesAmount={post.votes.length}
-            commentsAmount={post.comments.length}
-            post={post}
-          />
-        </div>
-      ))}
+            ref={i == posts.length - 1 ? ref : null}
+          >
+            <Post
+              key={i}
+              votesAmount={votes}
+              commentsAmount={post.comments.length}
+              post={post}
+            />
+          </div>
+        );
+      })}
       {isFetchingNextPage && (
         <>
           {Array(PAGES_TO_FETCH)
