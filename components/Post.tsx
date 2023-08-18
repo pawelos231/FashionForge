@@ -5,11 +5,13 @@ import { Icons } from "@UI/Icons";
 import EditorOutput from "./EditorOutput";
 import Image from "next/image";
 import { shimmer, toBase64 } from "./Loaders/Shimmer";
+import Link from "next/link";
 
 type PostProps = {
   votesAmount: number;
   commentsAmount: number;
   post: ExtendedPost;
+  currentVote;
 };
 
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
@@ -65,8 +67,10 @@ const Post = forwardRef(
         </div>
 
         <div className="bg-gray-50 text-sm px-4 py-3 flex items-center space-x-2">
-          <Icons.message className="h-5 w-5 text-gray-600" />
-          <span className="text-gray-600">{commentsAmount} comments</span>
+          <Link href={`/project/${post.id}`}>
+            <Icons.message className="h-5 w-5 text-gray-600" />
+            <span className="text-gray-600">{commentsAmount} comments</span>
+          </Link>
         </div>
       </>
     );

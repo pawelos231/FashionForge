@@ -71,12 +71,10 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
           (vote) => vote.userId === userData?.user?.userData.id
         );
 
-        //console.log(currentVote);
-
         return (
           <div
             className="rounded-md bg-white shadow-md w-[60%]"
-            key={i}
+            key={post.id}
             ref={i == posts.length - 1 ? ref : null}
           >
             <Post
@@ -84,6 +82,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
               votesAmount={votes}
               commentsAmount={post.comments.length}
               post={post}
+              currentVote={currentVote}
             />
           </div>
         );
@@ -93,7 +92,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
           {Array(PAGES_TO_FETCH)
             .fill("")
             .map(() => {
-              return <PostLoader />;
+              return <PostLoader key={Math.random()} />;
             })}
         </>
       )}

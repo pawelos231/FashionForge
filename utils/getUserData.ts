@@ -22,6 +22,7 @@ export const getUserData = () => {
     data: userData,
     isError,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
@@ -55,5 +56,6 @@ export const getUserData = () => {
     },
   });
 
+  if (error) throw new Error(error);
   if (!isLoading && !isError) return userData;
 };

@@ -14,7 +14,8 @@
       "@config/*": ["config/*"],
       "@components/*": ["components/*"],
       "@UI/*": ["UI/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@app/*": ["app/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
