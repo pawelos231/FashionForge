@@ -6,7 +6,7 @@ import EditorOutput from "./EditorOutput";
 import Image from "next/image";
 import { shimmer, toBase64 } from "./Loaders/Shimmer";
 import Link from "next/link";
-import PostVote from "./PostVote/PostVote";
+import PostVote from "./PostVote";
 
 type PostProps = {
   votesAmount: number;
