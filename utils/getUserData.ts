@@ -6,12 +6,8 @@ import axios from "axios";
 import { AxiosError } from "axios";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "./token";
 
-type Combined = {
-  userData: VerifiedToken;
-};
-
 type UserDataFromApi = {
-  user: Combined | null;
+  userData: VerifiedToken | null;
   accessToken: string | null;
 };
 

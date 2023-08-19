@@ -1,8 +1,8 @@
 "use client";
 
 import { ExtendedPost } from "interfaces/db";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "./Post";
 import axios from "axios";
@@ -54,8 +54,27 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
 
   const userData = getUserData();
 
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
     return <NoPostsView />;
+  }
+
+  if (!userData) {
+    return (
+      <div className="flex flex-col items-center space-y-6 py-6 mt-10">
+        {Array(PAGES_TO_FETCH)
+          .fill("")
+          .map(() => {
+            return (
+              <div
+                className="rounded-md bg-white shadow-md w-[60%]"
+                key={Math.random()}
+              >
+                <PostSkeleton key={Math.random()} />{" "}
+              </div>
+            );
+          })}
+      </div>
+    );
   }
 
   return (
@@ -67,9 +86,9 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
           return acc;
         }, 0);
 
-        const currentVote = post.votes.find(
-          (vote) => vote.userId === userData?.user?.userData.id
-        );
+        const currentVote = post.votes.find((vote) => {
+          return vote.userId === userData?.userData?.id;
+        });
 
         return (
           <div
