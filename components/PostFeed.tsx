@@ -82,7 +82,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
               votesAmount={votes}
               commentsAmount={post.comments.length}
               post={post}
-              currentVote={currentVote}
+              currentVote={currentVote?.type}
             />
           </div>
         );

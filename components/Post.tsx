@@ -7,22 +7,23 @@ import Image from "next/image";
 import { shimmer, toBase64 } from "./Loaders/Shimmer";
 import Link from "next/link";
 import PostVote from "./PostVote";
+import { VoteType } from "@prisma/client";
 
 type PostProps = {
   votesAmount: number;
   commentsAmount: number;
   post: ExtendedPost;
-  currentVote;
+  currentVote: VoteType | undefined;
 };
 
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
 
 const Post = forwardRef(
-  ({ votesAmount, commentsAmount, post }: PostProps, ref) => {
+  ({ votesAmount, commentsAmount, post, currentVote }: PostProps, ref) => {
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return (
-      <>
+      <div className="relative">
         <div className="px-6 py-4 space-y-4">
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0 w-[7%]">
@@ -35,7 +36,7 @@ const Post = forwardRef(
                 alt={`${post.author.name}'s Profile`}
                 placeholder="blur"
                 blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                  shimmer(100, 60)
+                  shimmer(20, 20)
                 )}`}
               />
             </div>
@@ -66,14 +67,18 @@ const Post = forwardRef(
             ) : null}
           </div>
         </div>
-
+        <PostVote
+          initialVote={currentVote}
+          postId={post.id}
+          initialVotesAmount={votesAmount}
+        />
         <div className="bg-gray-50 text-sm px-4 py-3 flex items-center space-x-2">
           <Link href={`/project/${post.id}`}>
             <Icons.message className="h-5 w-5 text-gray-600" />
             <span className="text-gray-600">{commentsAmount} comments</span>
           </Link>
         </div>
-      </>
+      </div>
     );
   }
 );
