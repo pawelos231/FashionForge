@@ -5,11 +5,12 @@ import { buttonVariants } from "@UI/Button";
 import { Button } from "@UI/Button";
 import SearchBar from "@UI/SearchBar";
 import { usePathname } from "next/navigation";
-
+import useToken from "@hooks/useToken";
 const mockedLoggedInUser: boolean = true;
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { token } = useToken();
 
   return (
     <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 border-b border-zinc-300 z-[10] py-2">
@@ -22,7 +23,7 @@ const Navbar = () => {
 
         <SearchBar />
 
-        {mockedLoggedInUser ? (
+        {token ? (
           <Link href="/project/create" className="flex gap-2 items-center">
             <Button className={buttonVariants()} variant={"link"}>
               {" "}

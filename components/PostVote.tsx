@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { VoteType } from "@prisma/client";
 import { Button } from "@UI/Button";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
-import { cn } from "@lib/utils";
 import useToken from "@hooks/useToken";
+import { AxiosError } from "axios";
+import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+import { redirect } from "next/navigation";
 
 // Toast notifications
 const successful = (message) => toast.success(message);
@@ -40,9 +44,7 @@ const PostVote = ({
   const [votesAmt, setVotesAmt] = useState<number>(initialVotesAmount);
   const [currentVote, setCurrentVote] = useState(initialVote);
 
-  console.log(initialVote);
-
-  const { token, setToken } = useToken();
+  const { token, setToken, deleteToken } = useToken();
 
   const { mutate: vote } = useMutation({
     mutationFn: async (voteType: VoteType) => {
@@ -63,15 +65,41 @@ const PostVote = ({
       }
     },
     onSuccess: (data: SuccessfulPost) => {
-      console.log(data);
       return successful(data.message);
     },
-    onError: (err: UnsuccessfulPost, voteType: VoteType) => {
-      console.log(err);
+    onError: (err: any, voteType: VoteType) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          console.log("not found");
+        }
+        if (err.response?.status === 401) {
+          console.log("not logged in");
+          deleteToken();
+          redirect("/login");
+        }
+      }
+
       return unsuccessful(err.error);
     },
-    onMutate: () => {},
+    onMutate: (type: VoteType) => {
+      if (currentVote === type) {
+        setCurrentVote(undefined);
+        if (type === VoteType.UP) setVotesAmt((prev) => prev - 1);
+        else if (type === VoteType.DOWN) setVotesAmt((prev) => prev + 1);
+      } else {
+        setCurrentVote(type);
+        if (type === VoteType.UP)
+          setVotesAmt((prev) => prev + (currentVote ? 2 : 1));
+        else if (type === VoteType.DOWN)
+          setVotesAmt((prev) => prev - (currentVote ? 2 : 1));
+      }
+    },
   });
+
+  useEffect(() => {
+    setCurrentVote(initialVote);
+  }, [initialVote]);
 
   return (
     <div className="absolute top-6 right-6 flex items-center space-x-4">
@@ -79,8 +107,6 @@ const PostVote = ({
       <Button
         onClick={() => {
           vote("UP");
-          setCurrentVote("UP");
-          setVotesAmt(votesAmt + 1);
         }}
         size="sm"
         variant="ghost"
@@ -93,15 +119,11 @@ const PostVote = ({
         />
       </Button>
 
-      {/* Votes */}
       <span className="font-medium text-sm text-gray-600">{votesAmt}</span>
 
-      {/* Downvote Button */}
       <Button
         onClick={() => {
           vote("DOWN");
-          setCurrentVote("DOWN");
-          setVotesAmt(votesAmt - 1);
         }}
         size="sm"
         variant="ghost"

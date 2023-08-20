@@ -2,7 +2,7 @@
 
 import { ExtendedPost } from "interfaces/db";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "./Post";
 import axios from "axios";
@@ -12,6 +12,7 @@ import { useIntersection } from "@mantine/hooks";
 import { wait } from "@utils/wait";
 import { VoteType } from "@prisma/client";
 import { getUserData } from "@utils/getUserData";
+import { VerifiedToken } from "@utils/token";
 
 type Props = {
   initialPosts: ExtendedPost[];
@@ -20,6 +21,7 @@ type Props = {
 
 const PostFeed = ({ initialPosts, postsCount }: Props) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
+  const [user, setUserData] = useState<VerifiedToken | undefined | null>();
 
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -54,27 +56,12 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
 
   const userData = getUserData();
 
+  useEffect(() => {
+    setUserData(userData);
+  }, [JSON.stringify(userData)]);
+
   if (!posts || posts.length === 0) {
     return <NoPostsView />;
-  }
-
-  if (!userData) {
-    return (
-      <div className="flex flex-col items-center space-y-6 py-6 mt-10">
-        {Array(PAGES_TO_FETCH)
-          .fill("")
-          .map(() => {
-            return (
-              <div
-                className="rounded-md bg-white shadow-md w-[60%]"
-                key={Math.random()}
-              >
-                <PostSkeleton key={Math.random()} />{" "}
-              </div>
-            );
-          })}
-      </div>
-    );
   }
 
   return (
@@ -87,7 +74,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
         }, 0);
 
         const currentVote = post.votes.find((vote) => {
-          return vote.userId === userData?.userData?.id;
+          return vote.userId === user?.id;
         });
 
         return (

@@ -29,12 +29,16 @@ const useLocalStorage = <T>(key: string, value?: T) => {
     }
   };
 
+  const clearStorage = () => {
+    localStorage.removeItem(storageVal);
+  };
+
   useEffect(() => {
     const rawValue = JSON.stringify(storageVal);
     localStorage.setItem(key, rawValue);
   }, [storageVal]);
 
-  return { storage: storageVal, setStorage: updateLocalStorage };
+  return { storage: storageVal, setStorage: updateLocalStorage, clearStorage };
 };
 
 export default useLocalStorage;

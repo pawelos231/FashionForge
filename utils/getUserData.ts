@@ -12,7 +12,7 @@ type UserDataFromApi = {
 };
 
 export const getUserData = () => {
-  const { token, setToken } = useToken();
+  const { token, setToken, deleteToken } = useToken();
 
   const {
     data: userData,
@@ -46,12 +46,12 @@ export const getUserData = () => {
           console.log("not found");
         }
         if (err.response?.status === 401) {
-          localStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+          deleteToken();
         }
       }
     },
   });
 
-  if (error) throw new Error(error);
-  if (!isLoading && !isError) return userData;
+  if (error) return null;
+  if (!isLoading && !isError) return userData.userData;
 };
