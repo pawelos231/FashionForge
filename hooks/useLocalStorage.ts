@@ -30,7 +30,7 @@ const useLocalStorage = <T>(key: string, value?: T) => {
   };
 
   const clearStorage = () => {
-    localStorage.removeItem(storageVal);
+    localStorage.removeItem(key);
   };
 
   useEffect(() => {

@@ -5,10 +5,10 @@ import { buttonVariants } from "@UI/Button";
 import { formatTimeToNow } from "@lib/utils";
 import { db } from "@lib/db";
 import { Suspense } from "react";
-import CommentsSection from "./Comments/CommentsSection";
 import { PAGES_TO_FETCH } from "@constants/config";
 import PostSkeleton from "./Loaders/SkeletonPostLoader";
 import PostNotFound from "./PostNotFound";
+import { VoteType } from "@prisma/client";
 
 interface SubRedditPostPageProps {
   postId: number;
@@ -27,6 +27,12 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
 
   if (!post) return <PostNotFound />;
 
+  const votes = post.votes.reduce((acc, curr) => {
+    if (curr.type === VoteType.UP) return acc + 1;
+    if (curr.type === VoteType.DOWN) return acc - 1;
+    return acc;
+  }, 0);
+
   return (
     <div className="flex items-center justify-center py-12">
       <div className="w-full max-w-7xl bg-white rounded-lg p-6">
@@ -36,7 +42,7 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
               <ArrowBigUp className="h-6 w-6 text-zinc-700" />
             </div>
             <div className="text-center py-2 font-medium text-sm text-zinc-900">
-              <Loader2 className="h-4 w-4 animate-spin" />
+              {votes}
             </div>
             <div className={buttonVariants({ variant: "ghost" })}>
               <ArrowBigDown className="h-6 w-6 text-zinc-700" />
@@ -55,24 +61,7 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
 
               <EditorOutput content={post.content} />
             </div>
-            <Suspense
-              fallback={
-                <>
-                  {Array(PAGES_TO_FETCH)
-                    .fill("")
-                    .map(() => {
-                      return (
-                        <div
-                          className="rounded-md bg-white shadow-md w-[60%]"
-                          key={Math.random()}
-                        >
-                          <PostSkeleton key={Math.random()} />{" "}
-                        </div>
-                      );
-                    })}
-                </>
-              }
-            >
+            <Suspense fallback={<CommentsSectionSkeleton />}>
               <CommentsSectionSkeleton />
             </Suspense>
           </div>

@@ -1,6 +1,7 @@
 import Providers from "providers/Providers";
 import "../styles/globals.css";
 import Navbar from "@components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -13,6 +14,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <Toaster position="bottom-right" reverseOrder={false} />
         </Providers>
       </body>
     </html>

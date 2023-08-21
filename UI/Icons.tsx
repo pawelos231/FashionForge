@@ -1,8 +1,8 @@
-import { LucideProps } from "lucide-react";
+import { LucideProps, User } from "lucide-react";
 
 export const Icons = {
   // ... (other icons)
-
+  user: User,
   message: (props: LucideProps) => (
     <svg
       {...props}

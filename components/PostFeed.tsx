@@ -32,7 +32,6 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
     useInfiniteQuery({
       queryKey: ["posts", "ininity"],
       queryFn: async ({ pageParam = 1 }) => {
-        await wait(5000); //for debug
         const query = `/api/posts?limit=${PAGES_TO_FETCH}&page=${pageParam}`;
         const { data } = (await axios.get(query)) as { data: ExtendedPost[] };
         return data;

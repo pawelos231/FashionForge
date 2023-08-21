@@ -11,7 +11,11 @@ import { useRouter } from "next/navigation";
 import { wait } from "utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
+import { toast } from "react-hot-toast";
 import { useEffect } from "react";
+
+const successful = (message) => toast.success(message);
+const unsuccessful = (error) => toast.error(error);
 
 type ReturnTypeToken = {
   accessToken: string;
@@ -19,8 +23,9 @@ type ReturnTypeToken = {
 
 const LoginComponent = () => {
   const router = useRouter();
-  const { storage, setStorage } =
-    useLocalStorage<string>(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
+  const { storage, setStorage } = useLocalStorage<string>(
+    ACCESS_TOKEN_LOCAL_STORAGE_NAME
+  );
 
   const clearInputs = () => {
     setValue("email", "");
@@ -44,18 +49,21 @@ const LoginComponent = () => {
   const { mutate: login, isLoading } = useMutation({
     mutationFn: async ({ email, password }: LoginRequest) => {
       const payload: LoginRequest = { email, password };
-      await wait(1000);
       const { data } = await axios.post("/api/auth/login", payload);
       return data;
     },
     onError: (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
-          return ""; //put here some taost like message later or something
+          return unsuccessful(err.response.data.error);
+        }
+        if (err.response?.status === 409) {
+          return unsuccessful(err.response.data.error);
         }
       }
     },
     onSuccess: (data: ReturnTypeToken) => {
+      console.log(data);
       setStorage(data.accessToken);
       router.refresh();
       clearInputs();

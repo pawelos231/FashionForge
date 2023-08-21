@@ -3,13 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { VoteType } from "@prisma/client";
 import { Button } from "@UI/Button";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import useToken from "@hooks/useToken";
 import { AxiosError } from "axios";
-import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 import { redirect } from "next/navigation";
 
 // Toast notifications
@@ -134,7 +133,6 @@ const PostVote = ({
             currentVote === "DOWN" ? "text-red-500 fill-red-500" : ""
           }`}
         />
-        <Toaster position="bottom-right" reverseOrder={false} />
       </Button>
     </div>
   );
