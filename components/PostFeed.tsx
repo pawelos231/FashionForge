@@ -87,18 +87,6 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
               commentsAmount={post.comments.length}
               post={post}
               currentVote={currentVote?.type}
-              info={
-                <>
-                  <Post.MainContent>
-                    <Post.Image />
-                    <Post.Essentials />
-                    <Post.Title />
-                    <Post.Content />
-                  </Post.MainContent>
-                  <Post.Votes />
-                  <Post.Comments />
-                </>
-              }
             />
           </div>
         );

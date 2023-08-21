@@ -11,6 +11,8 @@ import PostContent from "./PostContent";
 import PostImage from "./PostImage";
 import PostTitle from "./PostTitle";
 import PostMainContent from "./PostMainContent";
+import PostAuthorName from "./PostAuthorName";
+import PostDate from "./PostDate";
 
 type PostProps = {
   votesAmount: number;
@@ -37,10 +39,11 @@ const Post = ({
     <PostContext.Provider
       value={{ post, commentsAmount, currentVote, votesAmount }}
     >
-      <div className="relative">{info}</div>
+      <div className="relative">{info ?? DEFAULT_INFO}</div>
     </PostContext.Provider>
   );
 };
+
 Post.Comments = PostCommentsTab;
 Post.Votes = PostVoteTab;
 Post.Essentials = PostEssentialData;
@@ -48,5 +51,23 @@ Post.Content = PostContent;
 Post.Image = PostImage;
 Post.Title = PostTitle;
 Post.MainContent = PostMainContent;
+Post.Author = PostAuthorName;
+Post.Date = PostDate;
+
+const DEFAULT_INFO = (
+  <>
+    <Post.MainContent>
+      <Post.Image />
+      <Post.Essentials>
+        <Post.Author />
+        <Post.Date />
+      </Post.Essentials>
+      <Post.Title />
+      <Post.Content />
+    </Post.MainContent>
+    <Post.Votes />
+    <Post.Comments />
+  </>
+);
 
 export default Post;

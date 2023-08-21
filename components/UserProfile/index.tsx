@@ -90,11 +90,11 @@ const UserProfile = () => {
       </div>
 
       <div className="mt-4 mb-4">
-        <a href="/user/posts" className="text-blue-500 hover:underline">
+        <a href="/profile/posts" className="text-blue-500 hover:underline">
           View Created Posts
         </a>
         <span className="mx-2 text-gray-400">|</span>
-        <a href="/user/comments" className="text-blue-500 hover:underline">
+        <a href="/profile/comments" className="text-blue-500 hover:underline">
           View Created Comments
         </a>
       </div>
