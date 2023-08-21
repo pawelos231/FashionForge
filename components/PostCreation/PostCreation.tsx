@@ -141,10 +141,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
             </div>
             <div className="mb-6 h-[80%]">
               <label className="block text-sm font-medium mb-2">Content</label>
-              <QuillTextEditor
-                HandleChange={handleContentChange}
-                {...register("content")}
-              />
+              <QuillTextEditor HandleChange={handleContentChange} />
               {errors.content && (
                 <div className="text-red-500">{errors.content.message}</div>
               )}

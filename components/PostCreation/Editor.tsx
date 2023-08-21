@@ -28,14 +28,12 @@ type Props = {
   HandleChange: (value: string) => void;
 };
 
-const QuillTextEditor = React.forwardRef(
-  ({ HandleChange }: Props): JSX.Element => {
-    return (
-      <div className="h-[30%]">
-        <Quill modules={ToolbarView} theme="snow" onChange={HandleChange} />
-      </div>
-    );
-  }
-);
+const QuillTextEditor = ({ HandleChange }: Props): JSX.Element => {
+  return (
+    <div className="h-[30%]">
+      <Quill modules={ToolbarView} theme="snow" onChange={HandleChange} />
+    </div>
+  );
+};
 
 export default memo(QuillTextEditor);

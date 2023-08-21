@@ -43,7 +43,7 @@ type Props = {
 // Main component
 const Customizer = ({ changeView }: Props) => {
   // State variables
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [file, setFile] = useState<File | null>(null);
   const [color, setColor] = useState<string>("#fff");
   const [prompt, setPrompt] = useState<string>("");
   const [generatingImg, setGeneratingImg] = useState(false);
@@ -151,53 +151,51 @@ const Customizer = ({ changeView }: Props) => {
   // Return JSX
   return (
     <AnimatePresence>
-      <>
-        <motion.div
-          className="absolute top-20 right-4 z-10"
-          {...slideAnimation("right")}
+      <motion.div
+        className="absolute top-20 right-4 z-10"
+        {...slideAnimation("right")}
+      >
+        <button
+          className="flex items-center p-2 bg-white border border-gray-300 rounded cursor-pointer"
+          onClick={() => changeView(false)}
         >
-          <button
-            className="flex items-center p-2 bg-white border border-gray-300 rounded cursor-pointer"
-            onClick={() => changeView(false)}
-          >
-            <FiArrowLeft className="mr-1" />
-            Go Back
-          </button>
-        </motion.div>
-        <motion.div
-          key="custom"
-          className="absolute top-0 left-0 z-10"
-          {...slideAnimation("left")}
-        >
-          <div className="flex items-center z-10">
-            <div className="editortabs-container tabs z-10">
-              {EditorTabs.map((item) => (
-                <FilterTab
-                  key={item.name}
-                  tabName={item.name}
-                  alreadyActiveTabName={activeEditorTab}
-                  handlePickFilter={handlePickFilter}
-                />
-              ))}
-              {generateTabContent()}
-            </div>
+          <FiArrowLeft className="mr-1" />
+          Go Back
+        </button>
+      </motion.div>
+      <motion.div
+        key="custom"
+        className="absolute top-0 left-0 z-10"
+        {...slideAnimation("left")}
+      >
+        <div className="flex items-center z-10">
+          <div className="editortabs-container tabs z-10">
+            {EditorTabs.map((item) => (
+              <FilterTab
+                key={item.name}
+                tabName={item.name}
+                alreadyActiveTabName={activeEditorTab}
+                handlePickFilter={handlePickFilter}
+              />
+            ))}
+            {generateTabContent()}
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
-        <motion.div className="filtertabs-container" {...slideAnimation("up")}>
-          <TabPickTexture
-            tab={TextureType.logo}
-            handleClick={handleChangeSelectedFilterTabs}
-            filterObj={activeFilterTab}
-          />
-          <TabPickFull
-            tab={TextureType.full}
-            handleClick={handleChangeSelectedFilterTabs}
-            filterObj={activeFilterTab}
-          />
-        </motion.div>
-        <Canvas state={state} />
-      </>
+      <motion.div className="filtertabs-container" {...slideAnimation("up")}>
+        <TabPickTexture
+          tab={TextureType.logo}
+          handleClick={handleChangeSelectedFilterTabs}
+          filterObj={activeFilterTab}
+        />
+        <TabPickFull
+          tab={TextureType.full}
+          handleClick={handleChangeSelectedFilterTabs}
+          filterObj={activeFilterTab}
+        />
+      </motion.div>
+      <Canvas state={state} />
     </AnimatePresence>
   );
 };

@@ -11,8 +11,8 @@ export enum TextureType {
 }
 
 type Props = {
-  file: File | undefined;
-  setFile: (file: File | undefined) => void;
+  file: File | null;
+  setFile: (file: File | null) => void;
   readFile: (type: TextureType) => void;
 };
 
