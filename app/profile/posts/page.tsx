@@ -5,4 +5,6 @@ const CreatedPosts = async () => {
   return <CretedPostsFeed />;
 };
 
+export const revalidate = 600;
+
 export default CreatedPosts;

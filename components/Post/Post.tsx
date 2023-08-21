@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from "react";
+import { useRef } from "react";
 import { ExtendedPost } from "interfaces/db";
 import { VoteType } from "@prisma/client";
 import PostContext from "./PostContext";
@@ -54,6 +54,7 @@ Post.MainContent = PostMainContent;
 Post.Author = PostAuthorName;
 Post.Date = PostDate;
 
+//default info represents the post composed of all the available parts
 const DEFAULT_INFO = (
   <>
     <Post.MainContent>
