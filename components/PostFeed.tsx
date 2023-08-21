@@ -9,7 +9,6 @@ import axios from "axios";
 import NoPostsView from "./homepage/NoPostsView";
 import PostSkeleton from "./Loaders/SkeletonPostLoader";
 import { useIntersection } from "@mantine/hooks";
-import { wait } from "@utils/wait";
 import { VoteType } from "@prisma/client";
 import { getUserData } from "@utils/getUserData";
 import { VerifiedToken } from "@utils/token";
@@ -88,6 +87,18 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
               commentsAmount={post.comments.length}
               post={post}
               currentVote={currentVote?.type}
+              info={
+                <>
+                  <Post.MainContent>
+                    <Post.Image />
+                    <Post.Essentials />
+                    <Post.Title />
+                    <Post.Content />
+                  </Post.MainContent>
+                  <Post.Votes />
+                  <Post.Comments />
+                </>
+              }
             />
           </div>
         );
