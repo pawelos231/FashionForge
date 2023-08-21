@@ -1,10 +1,8 @@
 import React from "react";
 import CretedPostsFeed from "@components/UserProfile/CreatedPosts";
 
-const Page = async () => {
+const CreatedPosts = async () => {
   return <CretedPostsFeed />;
 };
 
-export const revalidate = 600;
-
-export default Page;
+export default CreatedPosts;

@@ -1,3 +1,5 @@
+"use client";
+
 import { EditorTabsEnum } from "@constants/CustomizerTabs";
 import { Button } from "@UI/Button";
 
