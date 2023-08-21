@@ -2,11 +2,11 @@ import { forwardRef, useRef } from "react";
 import { formatTimeToNow } from "@lib/utils";
 import { ExtendedPost } from "interfaces/db";
 import { Icons } from "@UI/Icons";
-import EditorOutput from "./EditorOutput";
+import EditorOutput from "../EditorOutput";
 import Image from "next/image";
-import { shimmer, toBase64 } from "./Loaders/Shimmer";
+import { shimmer, toBase64 } from "../Loaders/Shimmer";
 import Link from "next/link";
-import PostVote from "./PostVote";
+import PostVote from "../PostVote";
 import { VoteType } from "@prisma/client";
 
 type PostProps = {
@@ -17,6 +17,8 @@ type PostProps = {
 };
 
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
+
+//make it composable
 
 const Post = forwardRef(
   ({ votesAmount, commentsAmount, post, currentVote }: PostProps, ref) => {

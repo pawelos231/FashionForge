@@ -55,5 +55,10 @@ export async function middleware(req: any) {
 }
 
 export const config = {
-  matcher: ["/api/posts/create", "/api/posts/vote", "/api/auth/token"],
+  matcher: [
+    "/api/posts/create",
+    "/api/posts/vote",
+    "/api/auth/token",
+    "/api/user/:path*",
+  ],
 };

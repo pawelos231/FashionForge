@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { wait } from "utils/wait";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "@utils/token";
 import { toast } from "react-hot-toast";

@@ -4,7 +4,7 @@ import { ExtendedPost } from "interfaces/db";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useMemo, useState } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
-import Post from "./Post";
+import Post from "./Post/Post";
 import axios from "axios";
 import NoPostsView from "./homepage/NoPostsView";
 import PostSkeleton from "./Loaders/SkeletonPostLoader";

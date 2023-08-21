@@ -11,13 +11,11 @@ import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { wait } from "@utils/wait";
-import { redirect } from "next/navigation";
 import { Post } from "@prisma/client";
 import useToken from "@hooks/useToken";
-import {
-  ACCESS_TOKEN_LOCAL_STORAGE_NAME,
-  AuthorizationHeaders,
-} from "@utils/token";
+import { AuthorizationHeaders } from "@utils/token";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface PostCreationProps {}
 
@@ -27,10 +25,15 @@ type SuccessfulPostCreation = {
   post: Post;
 };
 
+const successful = (message) => toast.success(message);
+const unsuccessful = (error) => toast.error(error);
+
 const PostCreation: React.FC<PostCreationProps> = () => {
+  const router = useRouter();
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
-  const { token, setToken } = useToken();
+  const { token, setToken, deleteToken } = useToken();
 
   const {
     register,
@@ -55,7 +58,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
   const { mutate: sendPost, isLoading } = useMutation({
     mutationFn: async ({ title, content }: PostRequest) => {
       const payload: PostRequest = { title, content };
-      await wait(1000);
 
       const headers: AuthorizationHeaders = {
         Authorization: token,
@@ -66,22 +68,25 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       });
       return data;
     },
-    onError: (err: any) => {
-      console.log(err.response?.data.error);
+    onError: async (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
-          console.log("not found");
+          unsuccessful(err.response.data.error);
+          await wait(500);
+          router.push("/");
         }
         if (err.response?.status === 401) {
-          localStorage.removeItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME);
-          redirect("/login");
+          deleteToken();
+          unsuccessful(err.response.data.error);
+          await wait(500);
+          router.push("/login");
         }
       }
     },
     onSuccess: (data: SuccessfulPostCreation) => {
       clearInputs();
+      successful(data.message);
       if (data.accessToken) setToken(data.accessToken);
-      console.log(data.post);
     },
   });
 

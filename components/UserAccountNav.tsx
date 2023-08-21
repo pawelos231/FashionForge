@@ -43,7 +43,11 @@ export function UserAccountNav({ user, deleteToken }: Props) {
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link href="/r/create">Create Post</Link>
+          <Link href="/profile">Profile</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/project/create">Create Post</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
