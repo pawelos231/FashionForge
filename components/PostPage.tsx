@@ -9,6 +9,7 @@ import { PAGES_TO_FETCH } from "@constants/config";
 import PostSkeleton from "./Loaders/SkeletonPostLoader";
 import PostNotFound from "./PostNotFound";
 import { VoteType } from "@prisma/client";
+import CommentsSection from "./Comments/CommentsSection";
 
 interface SubRedditPostPageProps {
   postId: number;
@@ -62,7 +63,7 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
               <EditorOutput content={post.content} />
             </div>
             <Suspense fallback={<CommentsSectionSkeleton />}>
-              <CommentsSectionSkeleton />
+              <CommentsSection postId={postId} />
             </Suspense>
           </div>
         </div>
