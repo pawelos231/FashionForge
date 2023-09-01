@@ -11,7 +11,7 @@ const CommentsSection = async ({ postId }: Props) => {
 
   return (
     <div>
-      <CommentCreation />
+      <CommentCreation postId={postId} />
       <div className="mt-20">
         {comments.length === 0 ? (
           <div>nic tu nie ma</div>
