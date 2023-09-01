@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       req.json(),
     ]);
 
-    const co = await db.user.update({
+    await db.user.update({
       where: {
         id: userData.payload?.id,
       },
@@ -26,8 +26,6 @@ export async function POST(req: Request) {
         description: bio,
       },
     });
-
-    console.log(co);
 
     return NextResponse.json(
       { message: "successfuly added bio" },

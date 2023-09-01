@@ -10,6 +10,8 @@ import UserProfileSkeleton from "./SkeletonMain";
 import NoUserView from "./NoUser";
 import { useCallback, useState } from "react";
 import BioCreator from "./BioCreator";
+import ImageUploader from "./PictureCreator";
+import Image from "next/image";
 
 type Count = {
   _count: {
@@ -33,7 +35,11 @@ const unsuccessful = (error) => toast.error(error);
 
 const UserProfile = () => {
   const [openedBioCreator, setOpenBioCreator] = useState<boolean>(false);
+  const [openedPictureCreator, setOpenPictureCreator] =
+    useState<boolean>(false);
+
   const [bio, setBio] = useState<string>("");
+  const [profilePicture, setProfilePicture] = useState<string>("");
 
   const router = useRouter();
   const { token, deleteToken } = useToken();
@@ -62,10 +68,6 @@ const UserProfile = () => {
       }
     },
   });
-
-  const saveBioState = useCallback((bio: string) => {
-    setBio(bio);
-  }, []);
 
   const { mutate: saveBio } = useMutation({
     mutationFn: async (bio: string) => {
@@ -104,6 +106,45 @@ const UserProfile = () => {
     },
   });
 
+  const { mutate: savePicture } = useMutation({
+    mutationFn: async (fileUrl: string) => {
+      const payload = {
+        fileUrl,
+      };
+
+      console.log(payload);
+
+      const { data } = await axios.post("/api/user/picture", payload, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      return data;
+    },
+    onSuccess: (data: SuccessfulMutationReq) => {
+      return successful(data.message);
+    },
+    onError: (err: any) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          console.log("not found");
+        }
+        if (err.response?.status === 401) {
+          console.log("not logged in");
+          deleteToken();
+          return router.push("/login");
+        }
+      }
+
+      return unsuccessful(err.error);
+    },
+    onMutate: (fileUrl: string) => {
+      setProfilePicture(fileUrl);
+    },
+  });
+
   if (isLoading) return <UserProfileSkeleton />;
   if (!user) return <NoUserView />;
 
@@ -111,7 +152,22 @@ const UserProfile = () => {
     <div className="max-w-7xl mx-auto p-8 bg-white rounded-lg mt-24">
       <div className="bg-gray-200 h-60 rounded-lg mb-6"></div>
       <div className="flex items-center mb-6">
-        <div className="w-24 h-24 bg-gray-300 rounded-full"></div>
+        {user.photoLink.length == 0 ? (
+          <div
+            className="w-24 h-24 bg-gray-300 rounded-full"
+            onClick={() => setOpenPictureCreator((prev) => !prev)}
+          ></div>
+        ) : (
+          <div className="w-[15%] h-full rounded-full overflow-hidden">
+            <Image
+              src={user.photoLink}
+              width={200}
+              height={200}
+              alt="profile picture"
+              className="object-cover"
+            />
+          </div>
+        )}
         <div className="ml-8">
           <h1 className="text-4xl font-bold">{user.name}</h1>
           <p className="text-gray-600">Email: {user.email}</p>
@@ -167,6 +223,13 @@ const UserProfile = () => {
           initialBio={bio}
           onClose={() => setOpenBioCreator(false)}
           onSave={saveBio}
+        />
+      ) : null}
+
+      {openedPictureCreator ? (
+        <ImageUploader
+          onClose={() => setOpenBioCreator(false)}
+          onSave={savePicture}
         />
       ) : null}
     </div>

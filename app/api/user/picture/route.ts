@@ -4,32 +4,33 @@ import { headers } from "next/headers";
 import { AccessTokenHeaderType } from "@utils/token";
 import { verify } from "@utils/token";
 
-const ERROR_MESSAGE = "Error while fetching posts :(";
+const ERROR_MESSAGE = "Error while adding bio :(";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
     const headersList = headers();
     const { accessToken, changed } = JSON.parse(
       headersList.get("access_token")!
     ) as AccessTokenHeaderType;
 
-    const [userData] = await Promise.all([
+    const [userData, { fileUrl }] = await Promise.all([
       verify(accessToken, process.env.ACCESS_TK_SECRET!),
+      req.json(),
     ]);
 
-    const user = await db.user.findUnique({
-      where: { id: userData.payload?.id },
-      include: {
-        _count: {
-          select: {
-            posts: true,
-            comments: true,
-          },
-        },
+    await db.user.update({
+      where: {
+        id: userData.payload?.id,
+      },
+      data: {
+        photoLink: fileUrl,
       },
     });
 
-    return NextResponse.json(user, { status: 200 });
+    return NextResponse.json(
+      { message: "successfuly added bio" },
+      { status: 200 }
+    );
   } catch (err) {
     return NextResponse.json(
       {

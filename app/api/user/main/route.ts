@@ -29,8 +29,6 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log(user);
-
     return NextResponse.json(user, { status: 200 });
   } catch (err) {
     return NextResponse.json(
