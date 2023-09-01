@@ -20,10 +20,6 @@ type Count = {
   };
 };
 
-type Payload = {
-  bio: string;
-};
-
 type SuccessfulMutationReq = {
   message: string;
 };
@@ -65,6 +61,7 @@ const UserProfile = () => {
           unsuccessful(err.response.data.error);
           return router.push("/");
         }
+        unsuccessful(err?.response?.data.error);
       }
     },
   });

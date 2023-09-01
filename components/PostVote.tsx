@@ -10,6 +10,7 @@ import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import useToken from "@hooks/useToken";
 import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // Toast notifications
 const successful = (message) => toast.success(message);
@@ -41,6 +42,8 @@ const PostVote = ({
 
   const { token, deleteToken } = useToken();
 
+  const router = useRouter();
+
   const { mutate: vote } = useMutation({
     mutationFn: async (voteType: VoteType) => {
       const payload: PostVoteRequest = {
@@ -69,9 +72,8 @@ const PostVote = ({
           console.log("not found");
         }
         if (err.response?.status === 401) {
-          console.log("not logged in");
           deleteToken();
-          redirect("/login");
+          router.push("/login");
         }
       }
 

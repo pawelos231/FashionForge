@@ -29,7 +29,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
 
   const { isFetchingNextPage, fetchNextPage, hasNextPage, data } =
     useInfiniteQuery({
-      queryKey: ["posts", "ininity"],
+      queryKey: ["posts", "infinity"],
       queryFn: async ({ pageParam = 1 }) => {
         const query = `/api/posts?limit=${PAGES_TO_FETCH}&page=${pageParam}`;
         const { data } = (await axios.get(query)) as { data: ExtendedPost[] };

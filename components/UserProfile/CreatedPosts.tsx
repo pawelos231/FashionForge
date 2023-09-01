@@ -1,8 +1,12 @@
 "use client";
 
 import { ExtendedPost } from "interfaces/db";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useMemo, useState } from "react";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "../Post/Post";
 import axios, { AxiosError } from "axios";
@@ -17,6 +21,11 @@ import { VerifiedToken } from "@utils/token";
 import { getUserData } from "@utils/getUserData";
 
 const deleteIcon = "❌";
+
+type SuccessfulMutationReq = {
+  message: string;
+};
+
 const successful = (message) => toast.success(message);
 const unsuccessful = (error) => toast.error(error);
 
@@ -30,11 +39,11 @@ const CretedPostsFeed = () => {
   });
 
   const router = useRouter();
-  const { token } = useToken();
+  const { token, deleteToken } = useToken();
 
   const { isFetchingNextPage, fetchNextPage, hasNextPage, data, isFetching } =
     useInfiniteQuery({
-      queryKey: ["posts", "ininity"],
+      queryKey: ["posts", "infinity", "userCreated"],
       queryFn: async ({ pageParam = 1 }) => {
         const query = `/api/user/posts/?limit=${PAGES_TO_FETCH}&page=${pageParam}`;
         const { data } = (await axios.get(query, {
@@ -65,9 +74,47 @@ const CretedPostsFeed = () => {
       },
     });
 
-  const posts = data?.pages.flatMap((page) => page);
+  const queryClient = useQueryClient();
 
-  const handleDeletePost = (postId: number) => {};
+  const { mutate: deletePost } = useMutation({
+    mutationFn: async (postId: number) => {
+      const payload = {
+        postId,
+      };
+
+      const { data } = await axios.delete("/api/user/posts/post/delete", {
+        headers: {
+          Authorization: token,
+        },
+        data: payload,
+      });
+
+      return data;
+    },
+
+    onSuccess: (data: SuccessfulMutationReq) => {
+      queryClient.invalidateQueries(["posts", "infinity", "userCreated"]);
+      return successful(data.message);
+    },
+
+    onError: (err: any) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          console.log("not found");
+        }
+        if (err.response?.status === 401) {
+          console.log("not logged in");
+          deleteToken();
+          return router.push("/login");
+        }
+      }
+
+      return unsuccessful(err.error);
+    },
+  });
+
+  const posts = data?.pages.flatMap((page) => page);
 
   useEffect(() => {
     console.log(entry?.isIntersecting, hasNextPage);
@@ -101,11 +148,7 @@ const CretedPostsFeed = () => {
 
         return (
           <div className="flex w-full justify-center">
-            <div
-              className="rounded-md bg-white shadow-md w-[60%] mt-12"
-              key={post.id}
-              ref={i == posts.length - 1 ? ref : null}
-            >
+            <div className="rounded-md bg-white shadow-md w-[60%] mt-12  relative">
               <Post
                 key={i}
                 votesAmount={votes}
@@ -126,18 +169,19 @@ const CretedPostsFeed = () => {
                   </>
                 }
               />
+              {user?.id === post.authorId && (
+                <button
+                  className="text-red-500 hover:text-red-600 p-2 cursor-pointer absolute right-2 bottom-2"
+                  onClick={() => deletePost(post.id)}
+                >
+                  {deleteIcon}
+                </button>
+              )}
             </div>
-            {user?.id === post.authorId && (
-              <button
-                className="text-red-500 hover:text-red-600 p-2 cursor-pointer"
-                onClick={() => handleDeletePost(post.id)} // Replace with your delete post logic
-              >
-                {deleteIcon}
-              </button>
-            )}
           </div>
         );
       })}
+
       {(isFetchingNextPage || isFetching) && (
         <>
           {Array(PAGES_TO_FETCH)

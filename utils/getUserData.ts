@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { AuthorizationHeaders } from "./token";
 import axios from "axios";
 import { AxiosError } from "axios";
-import { ACCESS_TOKEN_LOCAL_STORAGE_NAME } from "./token";
 
 type UserDataFromApi = {
   userData: VerifiedToken | null;
@@ -46,6 +45,7 @@ export const getUserData = () => {
           console.log("not found");
         }
         if (err.response?.status === 401) {
+          console.warn("not logged");
           deleteToken();
         }
       }
