@@ -1,5 +1,4 @@
 import { usePostContext } from "./PostContext";
-import { formatTimeToNow } from "@lib/utils";
 import Image from "next/image";
 import { toBase64 } from "@components/Loaders/Shimmer";
 import { shimmer } from "@components/Loaders/Shimmer";

@@ -8,6 +8,8 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import UserProfileSkeleton from "./SkeletonMain";
 import NoUserView from "./NoUser";
+import { useCallback, useState } from "react";
+import BioCreator from "./BioCreator";
 
 type Count = {
   _count: {
@@ -16,15 +18,26 @@ type Count = {
   };
 };
 
+type Payload = {
+  bio: string;
+};
+
+type SuccessfulMutationReq = {
+  message: string;
+};
+
 type ExtendedUser = Count & User;
 
 const successful = (message) => toast.success(message);
 const unsuccessful = (error) => toast.error(error);
 
 const UserProfile = () => {
-  const router = useRouter();
+  const [openedBioCreator, setOpenBioCreator] = useState<boolean>(false);
+  const [bio, setBio] = useState<string>("");
 
-  const { token } = useToken();
+  const router = useRouter();
+  const { token, deleteToken } = useToken();
+
   const { data: user, isLoading } = useQuery({
     queryFn: async () => {
       const { data } = (await axios.get("/api/user/main", {
@@ -50,7 +63,46 @@ const UserProfile = () => {
     },
   });
 
-  console.log(user?._count.posts);
+  const saveBioState = useCallback((bio: string) => {
+    setBio(bio);
+  }, []);
+
+  const { mutate: saveBio } = useMutation({
+    mutationFn: async (bio: string) => {
+      const payload = {
+        bio,
+      };
+
+      const { data } = await axios.post("/api/user/bio", payload, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      return data;
+    },
+    onSuccess: (data: SuccessfulMutationReq) => {
+      return successful(data.message);
+    },
+    onError: (err: any) => {
+      console.log(err.response?.data.error);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          console.log("not found");
+        }
+        if (err.response?.status === 401) {
+          console.log("not logged in");
+          deleteToken();
+          return router.push("/login");
+        }
+      }
+
+      return unsuccessful(err.error);
+    },
+    onMutate: (bio: string) => {
+      setBio(bio);
+    },
+  });
 
   if (isLoading) return <UserProfileSkeleton />;
   if (!user) return <NoUserView />;
@@ -100,11 +152,23 @@ const UserProfile = () => {
       </div>
       <div className="mb-8">
         {/* Display user bio */}
-        <p className="text-gray-800 text-lg">
-          {user?.description || "No bio available"}
-        </p>
+        <div className="text-gray-800 text-lg">
+          <p
+            className="cursor-pointer"
+            onClick={() => setOpenBioCreator((prev) => !prev)}
+          >
+            {bio.length != 0 ? bio : user.description}
+          </p>
+        </div>
       </div>
       {/* Add more sections for user activity, posts, friends, etc. */}
+      {openedBioCreator ? (
+        <BioCreator
+          initialBio={bio}
+          onClose={() => setOpenBioCreator(false)}
+          onSave={saveBio}
+        />
+      ) : null}
     </div>
   );
 };

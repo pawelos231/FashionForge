@@ -24,7 +24,6 @@ type PostProps = {
 
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
 
-//make it composable
 
 const Post = ({
   votesAmount,

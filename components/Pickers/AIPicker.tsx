@@ -1,4 +1,5 @@
 "use client";
+
 type Props = {
   promp: string;
   setPromp: () => void;

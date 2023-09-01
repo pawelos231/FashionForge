@@ -31,10 +31,6 @@ type SuccessfulPost = {
   message: string;
 };
 
-type UnsuccessfulPost = {
-  error: string;
-};
-
 const PostVote = ({
   postId,
   initialVote,
@@ -43,7 +39,7 @@ const PostVote = ({
   const [votesAmt, setVotesAmt] = useState<number>(initialVotesAmount);
   const [currentVote, setCurrentVote] = useState(initialVote);
 
-  const { token, setToken, deleteToken } = useToken();
+  const { token, deleteToken } = useToken();
 
   const { mutate: vote } = useMutation({
     mutationFn: async (voteType: VoteType) => {
