@@ -10,6 +10,7 @@ import PostSkeleton from "./Loaders/SkeletonPostLoader";
 import PostNotFound from "./PostNotFound";
 import { VoteType } from "@prisma/client";
 import CommentsSection from "./Comments/CommentsSection";
+import Image from "next/image";
 
 interface SubRedditPostPageProps {
   postId: number;
@@ -36,12 +37,13 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
 
   return (
     <div className="flex items-center justify-center py-12">
-      <div className="w-full max-w-7xl bg-white rounded-lg p-6">
+      <div className="w-full max-w-8xl bg-white rounded-lg p-6">
         <div className="flex flex-col sm:flex-row items-start">
           <div className="w-1/6 flex items-center justify-center flex-col">
             <div className={buttonVariants({ variant: "ghost" })}>
               <ArrowBigUp className="h-6 w-6 text-zinc-700" />
             </div>
+
             <div className="text-center py-2 font-medium text-sm text-zinc-900">
               {votes}
             </div>
@@ -51,16 +53,19 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
           </div>
 
           <div className="w-full pr-4">
-            <div className="pb-24">
-              <p className="text-xs text-gray-500">
-                Posted by u/{post.author.name}{" "}
-                {formatTimeToNow(new Date(post?.createdAt))}
-              </p>
-              <h1 className="text-2xl font-semibold mt-2 text-gray-900">
-                {post.title}
-              </h1>
+            <div className="flex">
+              <UserProfilePicture profilePictureUrl={post.author.photoLink} />
+              <div className="pb-24 ml-8">
+                <p className="text-xs text-gray-500">
+                  Posted by u/{post.author.name}{" "}
+                  {formatTimeToNow(new Date(post?.createdAt))}
+                </p>
+                <h1 className="text-2xl font-semibold mt-2 text-gray-900">
+                  {post.title}
+                </h1>
 
-              <EditorOutput content={post.content} />
+                <EditorOutput content={post.content} />
+              </div>
             </div>
             <Suspense fallback={<CommentsSectionSkeleton />}>
               <CommentsSection postId={postId} />
@@ -89,3 +94,25 @@ const CommentsSectionSkeleton = () => {
 };
 
 export default PostPage;
+
+const UserProfilePicture = ({ profilePictureUrl }) => {
+  if (profilePictureUrl) {
+    return (
+      <div className="w-[6%]  h-full rounded-full overflow-hidden">
+        <Image
+          src={profilePictureUrl}
+          width={200}
+          height={200}
+          alt="profile picture"
+          className="object-cover"
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center">
+        <span className="text-white text-lg">Fallback</span>
+      </div>
+    );
+  }
+};

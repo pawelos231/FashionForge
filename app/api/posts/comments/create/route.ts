@@ -19,27 +19,20 @@ export async function POST(req: Request) {
       req.json() as Promise<CommentRequest>,
     ]);
 
-    if (!userData.payload)
-      return NextResponse.json(
-        {
-          error: ERROR_MESSAGE,
-        },
-        { status: 500 }
-      );
-
     const comment = await db.comment.create({
       data: {
         content: text,
         postId: postId,
-        userId: userData.payload.id,
+        userId: userData.payload?.id!,
       },
     });
 
     return NextResponse.json(
-      { message: "successfuly added bio" },
+      { message: "successfuly added comment" },
       { status: 200 }
     );
   } catch (err) {
+    console.log(err);
     return NextResponse.json(
       {
         error: ERROR_MESSAGE,

@@ -24,7 +24,7 @@ const CommentCreation = ({ postId }: Props) => {
 
   const router = useRouter();
 
-  const { mutate: addComment } = useMutation({
+  const { mutate: addComment, isLoading } = useMutation({
     mutationFn: async ({ postId, text }: CommentRequest) => {
       const payload: CommentRequest = { postId, text };
       const { data } = await axios.post("/api/posts/comments/create", payload, {
@@ -48,6 +48,9 @@ const CommentCreation = ({ postId }: Props) => {
           deleteToken();
           return router.push("/login");
         }
+        if (err.response?.status === 500) {
+          return unsuccessful("server error");
+        }
       }
 
       return unsuccessful(err.error);
@@ -64,7 +67,7 @@ const CommentCreation = ({ postId }: Props) => {
         className="w-2/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
       />
       <Button
-        disabled={false}
+        disabled={isLoading}
         onClick={() =>
           addComment({
             postId,

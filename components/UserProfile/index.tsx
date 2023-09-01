@@ -8,7 +8,7 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import UserProfileSkeleton from "./SkeletonMain";
 import NoUserView from "./NoUser";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import BioCreator from "./BioCreator";
 import ImageUploader from "./PictureCreator";
 import Image from "next/image";

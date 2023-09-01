@@ -60,5 +60,6 @@ export const config = {
     "/api/posts/vote",
     "/api/auth/token",
     "/api/user/:path*",
+    "/api/posts/comments/create",
   ],
 };
