@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 import { VerifiedToken } from "@utils/token";
 import { getUserData } from "@utils/getUserData";
 
+const deleteIcon = "❌";
 const successful = (message) => toast.success(message);
 const unsuccessful = (error) => toast.error(error);
 
@@ -66,6 +67,8 @@ const CretedPostsFeed = () => {
 
   const posts = data?.pages.flatMap((page) => page);
 
+  const handleDeletePost = (postId: number) => {};
+
   useEffect(() => {
     console.log(entry?.isIntersecting, hasNextPage);
     if (entry?.isIntersecting) {
@@ -97,31 +100,41 @@ const CretedPostsFeed = () => {
         });
 
         return (
-          <div
-            className="rounded-md bg-white shadow-md w-[60%] mt-12"
-            key={post.id}
-            ref={i == posts.length - 1 ? ref : null}
-          >
-            <Post
-              key={i}
-              votesAmount={votes}
-              commentsAmount={post.comments.length}
-              post={post}
-              currentVote={currentVote?.type}
-              info={
-                <>
-                  <Post.MainContent>
-                    <Post.Essentials>
-                      <Post.Date />
-                    </Post.Essentials>
-                    <Post.Title />
-                    <Post.Content />
-                  </Post.MainContent>
-                  <Post.Votes />
-                  <Post.Comments />
-                </>
-              }
-            />
+          <div className="flex w-full justify-center">
+            <div
+              className="rounded-md bg-white shadow-md w-[60%] mt-12"
+              key={post.id}
+              ref={i == posts.length - 1 ? ref : null}
+            >
+              <Post
+                key={i}
+                votesAmount={votes}
+                commentsAmount={post.comments.length}
+                post={post}
+                currentVote={currentVote?.type}
+                info={
+                  <>
+                    <Post.MainContent>
+                      <Post.Essentials>
+                        <Post.Date />
+                      </Post.Essentials>
+                      <Post.Title />
+                      <Post.Content />
+                    </Post.MainContent>
+                    <Post.Votes />
+                    <Post.Comments />
+                  </>
+                }
+              />
+            </div>
+            {user?.id === post.authorId && (
+              <button
+                className="text-red-500 hover:text-red-600 p-2 cursor-pointer"
+                onClick={() => handleDeletePost(post.id)} // Replace with your delete post logic
+              >
+                {deleteIcon}
+              </button>
+            )}
           </div>
         );
       })}
