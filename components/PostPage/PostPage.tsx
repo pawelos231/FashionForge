@@ -53,10 +53,10 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
             />
           </div>
 
-          <div className="w-full pr-4">
+          <div className="w-[70%] pr-4">
             <div className="flex">
               <UserProfilePicture profilePictureUrl={post.author.photoLink} />
-              <div className="pb-24 ml-8">
+              <div className="pb-16 ml-8">
                 <p className="text-xs text-gray-500">
                   Posted by u/{post.author.name}{" "}
                   {formatTimeToNow(new Date(post?.createdAt))}
@@ -64,10 +64,12 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
                 <h1 className="text-2xl font-semibold mt-2 text-gray-900">
                   {post.title}
                 </h1>
-
-                <EditorOutput content={post.content} />
               </div>
             </div>
+            <div className="pb-24">
+              <EditorOutput content={post.content} />
+            </div>
+
             <Suspense fallback={<CommentsSectionSkeleton />}>
               <CommentsSection postId={postId} />
             </Suspense>
