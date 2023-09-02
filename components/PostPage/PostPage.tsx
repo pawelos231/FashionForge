@@ -1,13 +1,13 @@
 import React from "react";
 import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
-import EditorOutput from "./EditorOutput";
+import EditorOutput from "../EditorOutput";
 import { buttonVariants } from "@UI/Button";
 import { formatTimeToNow } from "@lib/utils";
 import { db } from "@lib/db";
 import { Suspense } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
-import PostSkeleton from "./Loaders/SkeletonPostLoader";
-import PostNotFound from "./PostNotFound";
+import PostSkeleton from "../Loaders/SkeletonPostLoader";
+import PostNotFound from "../PostNotFound";
 import { VoteType } from "@prisma/client";
 import CommentsSection from "./Comments/CommentsSection";
 import Image from "next/image";
