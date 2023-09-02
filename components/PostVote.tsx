@@ -3,18 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import toast from "react-hot-toast";
 import { VoteType } from "@prisma/client";
 import { Button } from "@UI/Button";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import useToken from "@hooks/useToken";
 import { AxiosError } from "axios";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
-
-// Toast notifications
-const successful = (message) => toast.success(message);
-const unsuccessful = (error) => toast.error(error);
+import { successful, unsuccessful } from "@utils/commonToasts";
 
 // Types
 interface PostVoteProps {

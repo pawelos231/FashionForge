@@ -1,13 +1,22 @@
 import React from "react";
 import { db } from "@lib/db";
 import CommentCreation from "./CreateComment";
+import Comment from "./Comment";
 
 type Props = {
   postId: number;
 };
 
 const CommentsSection = async ({ postId }: Props) => {
-  const comments = await db.comment.findMany({});
+  const comments = await db.comment.findMany({
+    where: {
+      postId: postId,
+    },
+    include: {
+      user: true,
+      likes: true,
+    },
+  });
 
   return (
     <div>
@@ -18,7 +27,7 @@ const CommentsSection = async ({ postId }: Props) => {
         ) : (
           <div>
             {comments.map((comment) => {
-              return <div>comment</div>;
+              return <Comment comment={comment} />;
             })}
           </div>
         )}

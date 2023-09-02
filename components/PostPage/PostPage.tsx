@@ -1,7 +1,5 @@
 import React from "react";
-import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import EditorOutput from "../EditorOutput";
-import { buttonVariants } from "@UI/Button";
 import { formatTimeToNow } from "@lib/utils";
 import { db } from "@lib/db";
 import { Suspense } from "react";
@@ -11,6 +9,8 @@ import PostNotFound from "../PostNotFound";
 import { VoteType } from "@prisma/client";
 import CommentsSection from "./Comments/CommentsSection";
 import Image from "next/image";
+import PostVote from "@components/PostVote";
+import { getUserDataServer } from "@utils/getUserDataServer";
 
 interface SubRedditPostPageProps {
   postId: number;
@@ -27,7 +27,13 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
     },
   });
 
+  const user = await getUserDataServer();
+
   if (!post) return <PostNotFound />;
+
+  const currentVote = post.votes.find((vote) => {
+    return vote.userId === user?.payload?.id;
+  });
 
   const votes = post.votes.reduce((acc, curr) => {
     if (curr.type === VoteType.UP) return acc + 1;
@@ -39,17 +45,12 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
     <div className="flex items-center justify-center py-12">
       <div className="w-full max-w-8xl bg-white rounded-lg p-6">
         <div className="flex flex-col sm:flex-row items-start">
-          <div className="w-1/6 flex items-center justify-center flex-col">
-            <div className={buttonVariants({ variant: "ghost" })}>
-              <ArrowBigUp className="h-6 w-6 text-zinc-700" />
-            </div>
-
-            <div className="text-center py-2 font-medium text-sm text-zinc-900">
-              {votes}
-            </div>
-            <div className={buttonVariants({ variant: "ghost" })}>
-              <ArrowBigDown className="h-6 w-6 text-zinc-700" />
-            </div>
+          <div className="w-1/6 flex items-center justify-center flex-col h-36 relative">
+            <PostVote
+              postId={postId}
+              initialVotesAmount={votes}
+              initialVote={currentVote?.type}
+            />
           </div>
 
           <div className="w-full pr-4">
