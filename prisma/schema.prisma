@@ -19,16 +19,17 @@ enum Role {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  name        String
-  password    String
-  photoLink   String   @default("")
-  description String   @default("")
-  socialLinks String[] @default([""])
-  role        Role     @default(USER)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  name                String
+  password            String
+  photoLink           String   @default("")
+  backgroundPhotoLink String   @default("")
+  description         String   @default("")
+  socialLinks         String[] @default([""])
+  role                Role     @default(USER)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   posts         Post[]
   commentsLikes CommentVote[]
@@ -63,8 +64,8 @@ model CommentVote {
   commentId Int
   type      VoteType
 
-  user    User    @relation(fields: [userId], references: [id])
-  comment Comment @relation(fields: [commentId], references: [id])
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@id([commentId, userId])
 }

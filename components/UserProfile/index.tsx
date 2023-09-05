@@ -8,7 +8,7 @@ import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import UserProfileSkeleton from "./SkeletonMain";
 import NoUserView from "./NoUser";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import BioCreator from "./BioCreator";
 import ImageUploader from "./PictureCreator";
 import Image from "next/image";
@@ -39,6 +39,14 @@ const UserProfile = () => {
 
   const router = useRouter();
   const { token, deleteToken } = useToken();
+
+  const handleSetOpenPictureCreator = useCallback((val: boolean) => {
+    setOpenPictureCreator(val);
+  }, []);
+
+  const handleSetBioCreator = useCallback((val: boolean) => {
+    setOpenBioCreator(val);
+  }, []);
 
   const { data: user, isLoading } = useQuery({
     queryFn: async () => {
@@ -155,7 +163,10 @@ const UserProfile = () => {
             onClick={() => setOpenPictureCreator((prev) => !prev)}
           ></div>
         ) : (
-          <div className="w-[15%] h-full rounded-full overflow-hidden">
+          <div
+            className="w-[15%] h-full rounded-full overflow-hidden"
+            onClick={() => setOpenPictureCreator((prev) => !prev)}
+          >
             <Image
               src={user.photoLink}
               width={200}
@@ -218,14 +229,14 @@ const UserProfile = () => {
       {openedBioCreator ? (
         <BioCreator
           initialBio={bio}
-          onClose={() => setOpenBioCreator(false)}
+          onClose={() => handleSetBioCreator(false)}
           onSave={saveBio}
         />
       ) : null}
 
       {openedPictureCreator ? (
         <ImageUploader
-          onClose={() => setOpenBioCreator(false)}
+          onClose={() => handleSetOpenPictureCreator(false)}
           onSave={savePicture}
         />
       ) : null}

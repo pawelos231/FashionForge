@@ -11,6 +11,9 @@ import CommentsSection from "./Comments/CommentsSection";
 import Image from "next/image";
 import PostVote from "@components/PostVote";
 import { getUserDataServer } from "@utils/getUserDataServer";
+import ProjectView from "./ProjectView";
+
+const DEFAULT_MODEL = "/shirt_baked.glb";
 
 interface SubRedditPostPageProps {
   postId: number;
@@ -65,6 +68,15 @@ const PostPage = async ({ postId }: SubRedditPostPageProps) => {
                   {post.title}
                 </h1>
               </div>
+            </div>
+            <div className="pb-24 w-full flex justify-center">
+              <ProjectView
+                logoLink={post.logoTextureLink}
+                fullTextureLink={post.fullTextureLink}
+                pathToModel={
+                  post.modelLink.length === 0 ? DEFAULT_MODEL : post.modelLink
+                }
+              />
             </div>
             <div className="pb-24">
               <EditorOutput content={post.content} />

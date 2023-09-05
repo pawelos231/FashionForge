@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-      { message: "successfuly added bio" },
+      { message: "successfuly added profile picture" },
       { status: 200 }
     );
   } catch (err) {
