@@ -2,6 +2,7 @@ import React from "react";
 import { db } from "@lib/db";
 import CommentCreation from "./CreateComment";
 import Comment from "./Comment";
+import NoCommentsView from "./NoComments";
 
 type Props = {
   postId: number;
@@ -23,7 +24,7 @@ const CommentsSection = async ({ postId }: Props) => {
       <CommentCreation postId={postId} />
       <div className="mt-20">
         {comments.length === 0 ? (
-          <div>nic tu nie ma</div>
+          <NoCommentsView />
         ) : (
           <div>
             {comments.map((comment) => {

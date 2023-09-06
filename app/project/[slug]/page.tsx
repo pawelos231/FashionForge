@@ -7,7 +7,6 @@ interface PageProps {
 }
 
 const ProjectPage = ({ params }: PageProps) => {
-  console.log(params.slug);
   return (
     <div className="mt-20 w-full">
       <PostPage postId={Number(params.slug)} />

@@ -18,6 +18,7 @@ const DEFAULT_MODEL = "/shirt_baked.glb";
 interface SubRedditPostPageProps {
   postId: number;
 }
+const DefaultProfilePicture = "/defaultProfilePicture.png";
 
 const PostPage = async ({ postId }: SubRedditPostPageProps) => {
   const post = await db.post.findFirst({
@@ -125,8 +126,14 @@ const UserProfilePicture = ({ profilePictureUrl }) => {
     );
   } else {
     return (
-      <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center">
-        <span className="text-white text-lg">Fallback</span>
+      <div className="w-[6%]  h-full rounded-full overflow-hidden">
+        <Image
+          src={DefaultProfilePicture}
+          width={200}
+          height={200}
+          alt="profile picture"
+          className="object-cover"
+        />
       </div>
     );
   }
