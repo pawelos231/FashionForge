@@ -116,7 +116,7 @@ const UserProfilePicture = ({ profilePictureUrl }) => {
     return (
       <div className="w-[6%]  h-full rounded-full overflow-hidden">
         <Image
-          src={profilePictureUrl}
+          src={profilePictureUrl ?? DefaultProfilePicture}
           width={200}
           height={200}
           alt="profile picture"

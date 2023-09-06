@@ -2,6 +2,9 @@
 
 import React from "react";
 import CanvasComponent from "./Canvas";
+import { useState, useCallback } from "react";
+import Modal from "./Modal";
+import withPortal from "@lib/HOC/portal";
 
 type Props = {
   logoLink: string;
@@ -10,11 +13,25 @@ type Props = {
 };
 
 const ProjectView = ({ logoLink, fullTextureLink, pathToModel }: Props) => {
-  console.log(logoLink, fullTextureLink, pathToModel);
+  const [openedModal, handleOpenModal] = useState<boolean>(false);
+  const onClose = useCallback(() => {
+    handleOpenModal(false);
+  }, []);
+
+  const WrappedModal = withPortal(Modal, {
+    portalId: "#three",
+  });
+  console.log(openedModal);
   return (
-    <div className="flex h-[60vh] justify-center items-center w-[40%] ">
-      <CanvasComponent />
-    </div>
+    <>
+      <div
+        className="flex h-[60vh] justify-center items-center w-[40%]"
+        onClick={() => handleOpenModal((prev) => !prev)}
+      >
+        <CanvasComponent />
+      </div>
+      {openedModal ? <WrappedModal onClose={onClose} /> : null}
+    </>
   );
 };
 
