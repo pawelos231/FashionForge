@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import CameraRig from "@components/Canvas/CameraRig";
@@ -18,7 +18,7 @@ const CanvasComponent = () => {
       shadows
       camera={{ position: [0, 0, 0], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
-      className="w-full max-w-full h-full transition-all duration-0 ease-in"
+      className="w-full h-full transition-all duration-0 ease-in"
     >
       <Environment preset="city" />
       <CameraRig>
