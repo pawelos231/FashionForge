@@ -1,4 +1,4 @@
-# Fashion Forge Documentation
+# Fashion Forge
 
 ## Introduction
 
