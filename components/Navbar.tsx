@@ -16,7 +16,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const { token, deleteToken } = useToken();
 
-  const [tk, setTk] = useState<null | string>();
+  const [tk, setTk] = useState<null | string>(null);
   const [userData, setUserData] = useState<VerifiedToken | null | undefined>();
 
   const data = getUserData();
