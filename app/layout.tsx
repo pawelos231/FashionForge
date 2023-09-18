@@ -1,6 +1,6 @@
 import Providers from "providers/Providers";
 import "../styles/globals.css";
-import Navbar from "@components/Navbar";
+import Navbar from "@components/Navbar/Navbar";
 import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
