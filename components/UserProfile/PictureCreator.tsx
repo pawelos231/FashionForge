@@ -49,7 +49,6 @@ const ImageUploader = ({ onSave, onClose }: Props) => {
         onClientUploadComplete={(res) => {
           // Do something with the response
           if (res) {
-            console.log(res[0].fileUrl);
             handleSave(res[0].fileUrl);
           }
           alert("Upload Completed");

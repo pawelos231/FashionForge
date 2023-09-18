@@ -13,7 +13,7 @@ export const useOnclickOutside = <
   useEffect(() => {
     const listener = (e: Event) => {
       const el = ref?.current;
-      if (!el || el.contains((event?.target as Node) || null)) {
+      if (!el || el.contains((e?.target as Node) || null)) {
         return;
       }
       handler(e);

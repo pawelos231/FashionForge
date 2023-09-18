@@ -5,3 +5,11 @@ export type ExtendedPost = Post & {
   author: User;
   comments: Comment[];
 };
+
+export type IMiniPost = Post & {
+  author: {
+    name: string;
+    photoLink: string;
+    createdAt: string;
+  };
+};
