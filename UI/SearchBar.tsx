@@ -71,7 +71,7 @@ const SearchBar = () => {
         }}
         value={input}
         isLoading={false}
-        placeholder="Search Projects..."
+        placeholder="Search Posts..."
       />
       {input.length > 0 && (
         <MiniPostList
