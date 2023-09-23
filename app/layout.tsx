@@ -12,6 +12,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div id="three"></div>
+        <div id="progress_bar"></div>
 
         <Providers>
           <Navbar />

@@ -24,7 +24,6 @@ import {
 import { TextureType } from "@components/Pickers/FilePicker";
 import { FiArrowLeft } from "react-icons/fi";
 
-// Define types
 type ActiveFilterType = {
   logoShirt: boolean;
   stylishShirt: boolean;
@@ -40,9 +39,7 @@ type Props = {
   changeView: (value: boolean) => void;
 };
 
-// Main component
 const Customizer = ({ changeView }: Props) => {
-  // State variables
   const [file, setFile] = useState<File | null>(null);
   const [color, setColor] = useState<string>("#fff");
   const [prompt, setPrompt] = useState<string>("");
@@ -57,7 +54,6 @@ const Customizer = ({ changeView }: Props) => {
     stylishShirt: false,
   });
 
-  // Handlers
   const handleSetColor = useCallback((color: string) => {
     setColor(color);
   }, []);
@@ -112,7 +108,6 @@ const Customizer = ({ changeView }: Props) => {
     }
   };
 
-  // Generate tab content based on activeEditorTab
   const generateTabContent = () => {
     switch (activeEditorTab) {
       case EditorTabsEnum.COLOR_PICKER:
@@ -139,7 +134,6 @@ const Customizer = ({ changeView }: Props) => {
     }
   };
 
-  // Define the CustomizerState
   const state: CustomizerState = {
     logoShirt: activeFilterTab.logoShirt,
     stylishShirt: activeFilterTab.stylishShirt,
@@ -148,7 +142,6 @@ const Customizer = ({ changeView }: Props) => {
     color,
   };
 
-  // Return JSX
   return (
     <AnimatePresence>
       <motion.div

@@ -89,7 +89,7 @@ model Post {
   modelLink        String   @default("")
   fullTextureLink  String   @default("")
   logoTextureLink  String   @default("")
-  content          String
+  content          Json?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

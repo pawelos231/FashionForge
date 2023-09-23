@@ -1,18 +1,10 @@
 "use client";
 
-import {
-  useCallback,
-  useRef,
-  useState,
-  useEffect,
-  useImperativeHandle,
-} from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import React from "react";
 import { uploadFiles } from "@lib/uploadthing";
 import EditorJS from "@editorjs/editorjs";
 import "@styles/editor.css";
-import { customToast } from "@utils/commonToasts";
-import ProgressBar from "@ramonak/react-progress-bar";
 
 type Props = {
   HandleChange: (value: string) => void;
@@ -27,18 +19,6 @@ const TextEditor = React.memo(
     ({ HandleChange }, parentRef): JSX.Element => {
       const editorRef = useRef<EditorJS>();
       const [isMounted, setIsMounted] = useState<boolean>(false);
-
-      useImperativeHandle(
-        parentRef,
-        () => {
-          return {
-            async save() {
-              await editorRef.current?.save();
-            },
-          };
-        },
-        []
-      );
 
       const initializeEditor = useCallback(async () => {
         const [
@@ -88,7 +68,7 @@ const TextEditor = React.memo(
                       const [res] = await uploadFiles({
                         endpoint: "imageUploader",
                         onUploadProgress: ({ progress }) => {
-                          customToast(<ProgressBar completed={progress} />);
+                          //customToast(<ProgressBar progress={progress} />);
                         },
                         files: [file],
                       });
@@ -138,9 +118,18 @@ const TextEditor = React.memo(
         return <></>;
       }
 
+      const changeEditorValue = async () => {
+        const blocks = await editorRef.current?.save();
+        HandleChange(blocks! as unknown as string);
+      };
+
       return (
         <>
-          <div id="editor" className="min-h-[500px]" />
+          <div
+            id="editor"
+            className="min-h-[500px]"
+            onKeyDown={changeEditorValue}
+          />
           <p className="text-sm text-gray-500">
             Use{" "}
             <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">

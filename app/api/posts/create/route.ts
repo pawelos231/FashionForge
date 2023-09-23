@@ -5,8 +5,6 @@ import { verify } from "@utils/token";
 import { db } from "@lib/db";
 import { AccessTokenHeaderType } from "@utils/token";
 
-type ExtendedPostRequest = {};
-
 export async function POST(req, res) {
   const headersList = headers();
   const { accessToken, changed } = JSON.parse(

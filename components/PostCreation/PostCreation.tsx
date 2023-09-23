@@ -36,7 +36,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
   const router = useRouter();
   const ref = useRef<EditorRef | null>(null);
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
   const { token, setToken, deleteToken } = useToken();
 
@@ -67,8 +66,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       const headers: AuthorizationHeaders = {
         Authorization: token,
       };
-      const blocks = ref.current?.save();
-      console.log(blocks);
 
       const { data } = await axios.post("/api/posts/create", payload, {
         headers,
@@ -102,11 +99,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
   const handleChangeProjectViewState = useCallback((val: boolean) => {
     setViewProjectOpen(val);
   }, []);
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setImageFile(file || null);
-  };
 
   const handlePostSubmit = async () => {
     sendPost({ title: watch("title"), content: watch("content") });
@@ -147,9 +139,6 @@ const PostCreation: React.FC<PostCreationProps> = () => {
             <div className="mb-6 h-[80%]">
               <label className="block text-sm font-medium mb-2">Content</label>
               <TextEditor ref={ref} HandleChange={handleContentChange} />
-              {errors.content && (
-                <div className="text-red-500">{errors.content.message}</div>
-              )}
             </div>
 
             <Button
