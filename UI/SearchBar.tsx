@@ -1,6 +1,13 @@
-"use client";
-
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useOnclickOutside } from "@hooks/useOnClickOutside";
+import useDebounce from "@hooks/useDebounce";
+import { MiniPost } from "./MiniPost";
+import { IMiniPost } from "@interfaces/db";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   Command,
   CommandEmpty,
@@ -8,15 +15,6 @@ import {
   CommandList,
   CommandGroup,
 } from "./Command";
-import { useOnclickOutside } from "@hooks/useOnClickOutside";
-import useDebounce from "@hooks/useDebounce";
-import { usePathname } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { MiniPost } from "./MiniPost";
-import { IMiniPost } from "@interfaces/db";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
 const SearchBar = () => {
   const pathName = usePathname();
@@ -24,10 +22,12 @@ const SearchBar = () => {
   const [input, setInput] = useState<string>("");
   const commandRef = useRef<HTMLDivElement>(null);
 
+  // Close the search results when clicking outside the component
   useOnclickOutside(commandRef, () => {
     setInput("");
   });
 
+  // Debounce input changes and trigger a search
   useDebounce(
     async () => {
       refetch();
@@ -35,8 +35,6 @@ const SearchBar = () => {
     300,
     [input]
   );
-
-  const queryClient = useQueryClient();
 
   const {
     isFetching,
@@ -48,7 +46,6 @@ const SearchBar = () => {
       if (!input) return [];
 
       const { data } = await axios.get(`/api/posts/search?q=${input}`);
-      console.log(data);
       return data as IMiniPost[];
     },
     queryKey: ["search-query"],
@@ -66,7 +63,6 @@ const SearchBar = () => {
     >
       <CommandInput
         onValueChange={(text) => {
-          console.log(input);
           setInput(text);
         }}
         value={input}
@@ -90,7 +86,7 @@ type MiniPostListProps = {
   router: AppRouterInstance;
 };
 
-export const MiniPostList = ({
+const MiniPostList = ({
   isFetched,
   queryResults,
   router,
@@ -101,7 +97,7 @@ export const MiniPostList = ({
       {(queryResults?.length ?? 0) > 0 ? (
         <CommandGroup heading="Posts">
           {queryResults?.map((post) => (
-            <MiniPost router={router} post={post} />
+            <MiniPost router={router} post={post} key={post.id} />
           ))}
         </CommandGroup>
       ) : null}
