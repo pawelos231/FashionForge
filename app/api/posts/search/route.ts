@@ -1,5 +1,6 @@
 import { db } from "@lib/db";
-import { PAGES_TO_FETCH } from "@constants/config";
+
+const MINI_POST_FETCH_COUNT = 20;
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -25,6 +26,7 @@ export async function GET(req: Request) {
         },
       },
     },
+    take: MINI_POST_FETCH_COUNT,
   });
 
   return new Response(JSON.stringify(results));

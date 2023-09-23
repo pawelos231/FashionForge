@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useOnclickOutside } from "@hooks/useOnClickOutside";
 import useDebounce from "@hooks/useDebounce";
 import { MiniPost } from "./MiniPost";
+import MiniPostSkeleton from "./MiniPostSkeleton";
 import { IMiniPost } from "@interfaces/db";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
@@ -14,7 +15,8 @@ import {
   CommandInput,
   CommandList,
   CommandGroup,
-} from "./Command";
+} from "../Command";
+import { PAGES_TO_FETCH } from "@constants/config";
 
 const SearchBar = () => {
   const pathName = usePathname();
@@ -52,6 +54,8 @@ const SearchBar = () => {
     enabled: false,
   });
 
+  console.log(isFetching);
+
   useEffect(() => {
     setInput("");
   }, [pathName]);
@@ -74,6 +78,7 @@ const SearchBar = () => {
           router={router}
           queryResults={queryResults!}
           isFetched={isFetched}
+          isFetching={isFetching}
         />
       )}
     </Command>
@@ -84,16 +89,25 @@ type MiniPostListProps = {
   isFetched: boolean;
   queryResults: IMiniPost[];
   router: AppRouterInstance;
+  isFetching: boolean;
 };
 
 const MiniPostList = ({
   isFetched,
   queryResults,
   router,
+  isFetching,
 }: MiniPostListProps) => {
   return (
     <CommandList className="absolute bg-white top-full inset-x-0 shadow rounded-b-md max-h-[100px] overflow-scroll overflow-x-hidden">
       {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
+      {isFetching && (
+        <>
+          {new Array(PAGES_TO_FETCH).fill(1).map((item) => {
+            return <MiniPostSkeleton />;
+          })}
+        </>
+      )}
       {(queryResults?.length ?? 0) > 0 ? (
         <CommandGroup heading="Posts">
           {queryResults?.map((post) => (

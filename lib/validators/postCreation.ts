@@ -10,8 +10,7 @@ export const PostValidator = yup.object().shape({
   content: yup
     .string()
     .required("content is required")
-    .min(50, lessMore("content", MoreLess.more, 50))
-    .max(2000, lessMore("content", MoreLess.less, 10000)),
+    .min(50, lessMore("content", MoreLess.more, 50)),
 });
 
 export type PostRequest = Required<yup.InferType<typeof PostValidator>>;

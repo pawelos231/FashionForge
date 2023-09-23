@@ -38,7 +38,9 @@ export const MiniPost = ({
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium">{post.author.name}</p>
-              <p className="text-xs text-gray-500">{post.author.createdAt}</p>
+              <p className="text-xs text-gray-500">
+                {post.author.createdAt.split("T")[0]}
+              </p>
             </div>
           </div>
           <p>{post.title}</p>

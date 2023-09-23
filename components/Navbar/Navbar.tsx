@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { buttonVariants } from "@UI/Button";
 import { Button } from "@UI/Button";
-import SearchBar from "@UI/SearchBar";
+import SearchBar from "@UI/SearchBar/SearchBar";
 import { usePathname } from "next/navigation";
 import UserAccountView from "./userAccountView";
 

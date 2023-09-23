@@ -39,7 +39,6 @@ export const getUserData = () => {
       }
     },
     onError: (err: any) => {
-      console.log(err.response?.data.error);
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
           console.log("not found");

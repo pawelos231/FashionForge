@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@UI/Button";
-import QuillTextEditor from "./Editor";
+import TextEditor from "./Editor";
 import Customizer from "./Customizer";
 import { useCallback } from "react";
 import { PostValidator, PostRequest } from "@lib/validators/postCreation";
@@ -25,11 +25,16 @@ type SuccessfulPostCreation = {
   post: Post;
 };
 
+interface EditorRef {
+  save: () => Promise<void>;
+}
+
 const successful = (message) => toast.success(message);
 const unsuccessful = (error) => toast.error(error);
 
 const PostCreation: React.FC<PostCreationProps> = () => {
   const router = useRouter();
+  const ref = useRef<EditorRef | null>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [viewProjectOpen, setViewProjectOpen] = useState<boolean>(false);
@@ -62,6 +67,8 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       const headers: AuthorizationHeaders = {
         Authorization: token,
       };
+      const blocks = ref.current?.save();
+      console.log(blocks);
 
       const { data } = await axios.post("/api/posts/create", payload, {
         headers,
@@ -72,13 +79,11 @@ const PostCreation: React.FC<PostCreationProps> = () => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
           unsuccessful(err.response.data.error);
-          await wait(500);
           router.push("/");
         }
         if (err.response?.status === 401) {
           deleteToken();
           unsuccessful(err.response.data.error);
-          await wait(500);
           router.push("/login");
         }
       }
@@ -141,25 +146,11 @@ const PostCreation: React.FC<PostCreationProps> = () => {
             </div>
             <div className="mb-6 h-[80%]">
               <label className="block text-sm font-medium mb-2">Content</label>
-              <QuillTextEditor HandleChange={handleContentChange} />
+              <TextEditor ref={ref} HandleChange={handleContentChange} />
               {errors.content && (
                 <div className="text-red-500">{errors.content.message}</div>
               )}
             </div>
-
-            {/*
-        <div className="mb-6">
-          <label htmlFor="file-upload" className="filepicker-label">
-            Upload File
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
-        </div>
-        */}
 
             <Button
               variant="outline"
@@ -171,7 +162,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
           </div>
         </form>
       ) : (
-        <div className="w-full absolute h-full backdrop-blur-3xl">
+        <div className="w-full fixed h-full backdrop-blur-3xl z-20 top-0">
           <Customizer changeView={handleChangeProjectViewState} />
         </div>
       )}
