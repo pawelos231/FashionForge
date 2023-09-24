@@ -10,7 +10,6 @@ import { useCallback } from "react";
 import { PostValidator, PostRequest } from "@lib/validators/postCreation";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { wait } from "@utils/wait";
 import { Post } from "@prisma/client";
 import useToken from "@hooks/useToken";
 import { AuthorizationHeaders } from "@utils/token";
@@ -44,7 +43,7 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     watch,
     setValue,
     handleSubmit,
-    formState: { errors }, // Get the form validation errors
+    formState: { errors },
   } = useForm<PostRequest>({
     resolver: yupResolver(PostValidator),
     defaultValues: {

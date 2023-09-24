@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from "react";
 import { ExtendedPost } from "interfaces/db";
 import { VoteType } from "@prisma/client";
@@ -24,7 +26,6 @@ type PostProps = {
 
 const defaultProfilePicture = "/defaultProfilePicture.png"; // Provide the default profile picture path
 
-
 const Post = ({
   votesAmount,
   commentsAmount,
@@ -32,8 +33,6 @@ const Post = ({
   currentVote,
   info,
 }: PostProps) => {
-  const pRef = useRef<HTMLParagraphElement>(null);
-
   return (
     <PostContext.Provider
       value={{ post, commentsAmount, currentVote, votesAmount }}

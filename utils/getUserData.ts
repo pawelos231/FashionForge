@@ -41,7 +41,7 @@ export const getUserData = () => {
     onError: (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 404) {
-          console.log("not found");
+          console.warn("not found");
         }
         if (err.response?.status === 401) {
           console.warn("not logged");

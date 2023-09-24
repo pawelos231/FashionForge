@@ -53,7 +53,14 @@ const TextEditor = React.memo(
             inlineToolbar: true,
             data: { blocks: [] },
             tools: {
-              header: Header.default,
+              header: {
+                class: Header.default,
+                config: {
+                  placeholder: "Enter a header",
+                  levels: [2, 3, 4],
+                  defaultLevel: 3,
+                },
+              },
               linkTool: {
                 class: LinkTool.default,
                 config: {

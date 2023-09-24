@@ -2,7 +2,7 @@
 
 import { ExtendedPost } from "interfaces/db";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PAGES_TO_FETCH } from "@constants/config";
 import Post from "./Post/Post";
 import axios from "axios";
@@ -26,6 +26,7 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
     root: lastPostRef.current,
     threshold: 1,
   });
+  const userData = getUserData();
 
   const { isFetchingNextPage, fetchNextPage, hasNextPage, data } =
     useInfiniteQuery({
@@ -51,8 +52,6 @@ const PostFeed = ({ initialPosts, postsCount }: Props) => {
       fetchNextPage();
     }
   }, [entry, fetchNextPage]);
-
-  const userData = getUserData();
 
   useEffect(() => {
     setUserData(userData);

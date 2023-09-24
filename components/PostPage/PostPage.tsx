@@ -1,5 +1,5 @@
 import React from "react";
-import EditorOutput from "../EditorOutput";
+import EditorOutput from "../EditorOutput/EditorOutput";
 import { formatTimeToNow } from "@lib/utils";
 import { db } from "@lib/db";
 import { Suspense } from "react";
