@@ -31,7 +31,6 @@ const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
 
   const setFilter = useCallback((filter: SearchType) => {
     handleFilterCriteria(filter);
-    //refetch();
   }, []);
 
   const { ref, entry } = useIntersection({
@@ -43,6 +42,7 @@ const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
     {
       queryKey: ["posts", "infinity"],
       queryFn: async ({ pageParam = 1 }) => {
+        console.log(filterCriteria);
         const query = `/api/posts?limit=${PAGES_TO_FETCH}&page=${pageParam}&filter=${filterCriteria}`;
         const { data } = (await axios.get(query)) as { data: ExtendedPost[] };
         return data;
@@ -68,6 +68,10 @@ const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
   useEffect(() => {
     setUserData(userData);
   }, [JSON.stringify(userData)]);
+
+  useEffect(() => {
+    refetch();
+  }, [filterCriteria]);
 
   if (!posts || posts.length === 0) {
     return <NoPostsView />;
