@@ -1,5 +1,5 @@
 import { db } from "@lib/db";
-import PostFeed from "@components/PostFeed";
+import PostFeed from "@components/homepage/PostFeed";
 import { PAGES_TO_FETCH } from "@constants/config";
 import { ExtendedPost } from "@interfaces/db";
 
