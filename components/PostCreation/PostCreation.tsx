@@ -87,6 +87,9 @@ const PostCreation: React.FC<PostCreationProps> = () => {
     onSuccess: (data: SuccessfulPostCreation) => {
       clearInputs();
       successful(data.message);
+      setTimeout(() => {
+        router.push("/");
+      }, 400);
       if (data.accessToken) setToken(data.accessToken);
     },
   });

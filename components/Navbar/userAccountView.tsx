@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { buttonVariants } from "@UI/Button";
 import { ACCESS_TOKEN_LOCAL_STORAGE_NAME, VerifiedToken } from "@utils/token";
-import { getUserData } from "@utils/getUserData";
+import { useUserData } from "@hooks/useUserData";
 
 const UserAccountView = () => {
   const pathname = usePathname();
@@ -18,7 +18,7 @@ const UserAccountView = () => {
 
   const [tk, setTk] = useState<null | undefined | string>(null);
   const [userData, setUserData] = useState<VerifiedToken | null | undefined>();
-  const data = getUserData();
+  const data = useUserData();
 
   useEffect(() => {
     setUserData(data);

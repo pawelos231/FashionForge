@@ -1,17 +1,20 @@
 import useToken from "@hooks/useToken";
-import { VerifiedToken } from "./token";
+import { VerifiedToken } from "../utils/token";
 import { useQuery } from "@tanstack/react-query";
-import { AuthorizationHeaders } from "./token";
+import { AuthorizationHeaders } from "../utils/token";
 import axios from "axios";
 import { AxiosError } from "axios";
+import { useState } from "react";
 
 type UserDataFromApi = {
   userData: VerifiedToken | null;
   accessToken: string | null;
 };
+type TokenReturnType = VerifiedToken | undefined | null;
 
-export const getUserData = () => {
+export const useUserData = () => {
   const { token, setToken, deleteToken } = useToken();
+  const [user, setUser] = useState<TokenReturnType>(undefined);
 
   const {
     data: userData,
@@ -34,6 +37,7 @@ export const getUserData = () => {
       return data;
     },
     onSuccess: (data) => {
+      setUser(data.userData);
       if (data.accessToken) {
         setToken(data.accessToken);
       }
@@ -52,5 +56,5 @@ export const getUserData = () => {
   });
 
   if (error) return null;
-  if (!isLoading && !isError) return userData.userData;
+  if (!isLoading && !isError) return user;
 };

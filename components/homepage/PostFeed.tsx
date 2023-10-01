@@ -5,17 +5,15 @@ import axios from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from "@mantine/hooks";
 import { VoteType } from "@prisma/client";
-import { getUserData } from "@utils/getUserData";
+import { useUserData } from "@hooks/useUserData";
 import { PAGES_TO_FETCH } from "@constants/config";
 import FilterPosts from "./Filters";
 import NoPostsView from "./NoPostsView";
 import PostSkeleton from "../Loaders/SkeletonPostLoader";
 import { ExtendedPost } from "@interfaces/db";
-import { VerifiedToken } from "@utils/token";
 import Post from "../Post/Post";
 import { SearchType } from "./Filters/enums";
 
-type TokenReturnType = VerifiedToken | undefined | null;
 type Props = {
   initialPosts: ExtendedPost[];
   postsCount: number;
@@ -23,8 +21,8 @@ type Props = {
 
 const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
-  const userData = getUserData();
-  const [user, setUserData] = useState<TokenReturnType>();
+  const user = useUserData();
+
   const [filterCriteria, handleFilterCriteria] = useState<SearchType>(
     SearchType.ALL
   );
@@ -54,6 +52,7 @@ const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
         return pages.length + 1;
       },
       initialData: { pages: [initialPosts], pageParams: [1] },
+      refetchInterval: false,
     }
   );
 
@@ -64,10 +63,6 @@ const PostFeed: React.FC<Props> = ({ initialPosts, postsCount }) => {
       fetchNextPage();
     }
   }, [entry, fetchNextPage]);
-
-  useEffect(() => {
-    setUserData(userData);
-  }, [JSON.stringify(userData)]);
 
   useEffect(() => {
     refetch();

@@ -18,7 +18,7 @@ import useToken from "@hooks/useToken";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { VerifiedToken } from "@utils/token";
-import { getUserData } from "@utils/getUserData";
+import { getUserData } from "@hooks/useUserData";
 
 const deleteIcon = "❌";
 
