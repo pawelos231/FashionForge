@@ -16,6 +16,39 @@ export const useUserData = () => {
   const { token, setToken, deleteToken } = useToken();
   const [user, setUser] = useState<TokenReturnType>(undefined);
 
+  const getUser = async () => {
+    const headers: AuthorizationHeaders = {
+      Authorization: token,
+    };
+    const query = "/api/auth/token";
+    const { data } = (await axios.get(query, {
+      headers,
+    })) as {
+      data: UserDataFromApi;
+    };
+
+    return data;
+  };
+
+  const handleSuccess = (data) => {
+    setUser(data.userData);
+    if (data.accessToken) {
+      setToken(data.accessToken);
+    }
+  };
+
+  const handleError = (err: any) => {
+    if (err instanceof AxiosError) {
+      if (err.response?.status === 404) {
+        console.warn("not found");
+      }
+      if (err.response?.status === 401) {
+        console.warn("not logged");
+        deleteToken();
+      }
+    }
+  };
+
   const {
     data: userData,
     isError,
@@ -23,36 +56,9 @@ export const useUserData = () => {
     error,
   } = useQuery({
     queryKey: ["userData"],
-    queryFn: async () => {
-      const headers: AuthorizationHeaders = {
-        Authorization: token,
-      };
-      const query = "/api/auth/token";
-      const { data } = (await axios.get(query, {
-        headers,
-      })) as {
-        data: UserDataFromApi;
-      };
-
-      return data;
-    },
-    onSuccess: (data) => {
-      setUser(data.userData);
-      if (data.accessToken) {
-        setToken(data.accessToken);
-      }
-    },
-    onError: (err: any) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 404) {
-          console.warn("not found");
-        }
-        if (err.response?.status === 401) {
-          console.warn("not logged");
-          deleteToken();
-        }
-      }
-    },
+    queryFn: getUser,
+    onSuccess: handleSuccess,
+    onError: handleError,
   });
 
   if (error) return null;
